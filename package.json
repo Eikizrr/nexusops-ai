@@ -1,0 +1,49 @@
+{
+  "name": "nexusops-ai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "server": "tsx server/index.ts",
+    "start": "npm run db:push && npm run db:seed && npm run server",
+    "fullstack": "concurrently \"npm:server\" \"npm:dev\"",
+    "db:push": "node prisma/init-sqlite.mjs && prisma generate",
+    "db:init": "node prisma/init-sqlite.mjs",
+    "db:seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generate",
+    "build": "tsc -b && vite build",
+    "build:deploy": "npm run db:push && npm run build",
+    "preview": "vite preview --host 0.0.0.0",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "concurrently": "^9.2.1",
+    "express": "^5.1.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^6.0.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.13.0",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "~5.7.2",
+    "vitest": "^4.1.9"
+  }
+}
