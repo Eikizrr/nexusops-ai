@@ -63,8 +63,6 @@ function serializeActivity(activity: {
 }
 
 async function ensureSeeded() {
-  await prisma.user.deleteMany({ where: { email: "erick@portfolio.dev" } });
-
   const count = await prisma.project.count();
   if (count === 0) {
     await prisma.project.createMany({

@@ -12,8 +12,6 @@ function hashPassword(password: string) {
 }
 
 async function main() {
-  await prisma.user.deleteMany({ where: { email: "erick@portfolio.dev" } });
-
   const count = await prisma.project.count();
   if (count === 0) {
     await prisma.project.createMany({

@@ -66,6 +66,16 @@ type Toast = {
   tone: "success" | "warning" | "error";
 };
 
+type AppSection = "overview" | "projects" | "intelligence" | "activity" | "warroom";
+
+const sectionItems: { id: AppSection; label: string; helper: string }[] = [
+  { id: "overview", label: "Overview", helper: "Resumo executivo" },
+  { id: "projects", label: "Projects", helper: "Carteira e CRUD" },
+  { id: "intelligence", label: "Intelligence", helper: "Riscos e dados" },
+  { id: "activity", label: "Activity", helper: "Historico" },
+  { id: "warroom", label: "War Room", helper: "Chat e IA" }
+];
+
 function currency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
@@ -628,6 +638,7 @@ function App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const [bootstrapping, setBootstrapping] = useState(true);
+  const [activeSection, setActiveSection] = useState<AppSection>("overview");
 
   const pushActivity = useCallback((type: ActivityLog["type"], title: string, description: string) => {
     setActivityLog((current) => [createActivity(type, title, description), ...current].slice(0, 16));
@@ -805,6 +816,7 @@ function App() {
             <button
               onClick={() => {
                 setDemoStep(0);
+                setActiveSection("overview");
                 pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentacao do produto foi acionado.");
               }}
             >
@@ -815,7 +827,12 @@ function App() {
               <RefreshCw size={17} />
               Atualizar sinais
             </button>
-            <button onClick={() => setQuery("high")}>
+            <button
+              onClick={() => {
+                setQuery("high");
+                setActiveSection("projects");
+              }}
+            >
               <Bell size={17} />
               Ver urgencias
             </button>
@@ -871,26 +888,37 @@ function App() {
         </div>
       </header>
 
-      <section className="metrics-grid">
-        <MetricCard icon={<LayoutDashboard />} label="Pipeline" value={currency(metrics.total)} helper="Receita mapeada" />
-        <MetricCard icon={<Activity />} label="Projetos ativos" value={String(metrics.active)} helper="Execucao em andamento" />
-        <MetricCard icon={<Check />} label="Progresso medio" value={`${metrics.avgProgress}%`} helper="Atualizado pelo fluxo" />
-        <MetricCard icon={<CalendarClock />} label="Prioridade alta" value={String(metrics.urgent)} helper="Demandam atencao" />
-      </section>
+      <nav className="section-tabs" aria-label="Navegacao principal do produto">
+        {sectionItems.map((item) => (
+          <button
+            key={item.id}
+            className={activeSection === item.id ? "active" : ""}
+            onClick={() => setActiveSection(item.id)}
+            aria-current={activeSection === item.id ? "page" : undefined}
+          >
+            <strong>{item.label}</strong>
+            <span>{item.helper}</span>
+          </button>
+        ))}
+      </nav>
 
-      <section className="intelligence-grid">
-        <AlertsPanel
-          alerts={alerts}
-          onStartDemo={() => {
-            setDemoStep(0);
-            pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentacao do produto foi acionado.");
-          }}
-        />
-        <MiniBarChart title="Projetos por status" caption="Portfolio health" data={statusChart} />
-        <MiniBarChart title="Receita por status" caption="Revenue view" data={revenueChart} format={currency} />
-      </section>
+      {activeSection === "overview" && (
+        <section className="section-view">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Executive overview</p>
+              <h2>O que precisa de decisao agora</h2>
+            </div>
+            <span>{projects.length} projetos monitorados</span>
+          </div>
+          <section className="metrics-grid">
+            <MetricCard icon={<LayoutDashboard />} label="Pipeline" value={currency(metrics.total)} helper="Receita mapeada" />
+            <MetricCard icon={<Activity />} label="Projetos ativos" value={String(metrics.active)} helper="Execucao em andamento" />
+            <MetricCard icon={<Check />} label="Progresso medio" value={`${metrics.avgProgress}%`} helper="Atualizado pelo fluxo" />
+            <MetricCard icon={<CalendarClock />} label="Prioridade alta" value={String(metrics.urgent)} helper="Demandam atencao" />
+          </section>
 
-      <section className="dashboard-grid">
+          <section className="dashboard-grid">
         <article className="weather-card">
           <div className="section-title">
             <div>
@@ -933,7 +961,18 @@ function App() {
           <p>{buildLocalInsight(projects, weather)}</p>
         </article>
       </section>
+        </section>
+      )}
 
+      {activeSection === "projects" && (
+        <section className="section-view">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Commercial operations</p>
+              <h2>Carteira, criacao e manutencao de projetos</h2>
+            </div>
+            <span>{filteredProjects.length} resultado(s)</span>
+          </div>
       <section className="workspace">
         {canManage ? (
           <ProjectForm editing={editing} onCancel={() => setEditing(null)} onSave={handleSave} />
@@ -1020,9 +1059,58 @@ function App() {
           </div>
         </section>
       </section>
+        </section>
+      )}
 
-      <ActivityTimeline activity={activityLog} />
-      <ChatPanel projects={projects} weather={weather} user={user} />
+      {activeSection === "intelligence" && (
+        <section className="section-view">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Decision intelligence</p>
+              <h2>Riscos, graficos e sinais externos</h2>
+            </div>
+            <span>{alerts.length || 1} sinal(is) ativos</span>
+          </div>
+          <section className="intelligence-grid">
+            <AlertsPanel
+              alerts={alerts}
+              onStartDemo={() => {
+                setDemoStep(0);
+                setActiveSection("overview");
+                pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentacao do produto foi acionado.");
+              }}
+            />
+            <MiniBarChart title="Projetos por status" caption="Operational health" data={statusChart} />
+            <MiniBarChart title="Receita por status" caption="Revenue view" data={revenueChart} format={currency} />
+          </section>
+        </section>
+      )}
+
+      {activeSection === "activity" && (
+        <section className="section-view">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Audit trail</p>
+              <h2>Eventos recentes do sistema</h2>
+            </div>
+            <span>{activityLog.length} registro(s)</span>
+          </div>
+          <ActivityTimeline activity={activityLog} />
+        </section>
+      )}
+
+      {activeSection === "warroom" && (
+        <section className="section-view">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">AI operations</p>
+              <h2>War Room com estado em tempo real</h2>
+            </div>
+            <span>BroadcastChannel + Copilot</span>
+          </div>
+          <ChatPanel projects={projects} weather={weather} user={user} />
+        </section>
+      )}
       <DemoGuide
         step={demoStep}
         onNext={() => setDemoStep((current) => (current === null ? 0 : current + 1))}
