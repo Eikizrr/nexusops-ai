@@ -41,7 +41,7 @@ export async function askCopilot(prompt: string, projects: Project[], weather?: 
       return data.answer;
     }
   } catch {
-    // Local fallback keeps the portfolio demo useful without backend or API keys.
+    // Local fallback keeps the product demo useful without backend or API keys.
   }
 
   return `${buildLocalInsight(projects, weather)} Sugestão: ataque primeiro itens de alta prioridade com progresso abaixo de 50% e use o CRUD para atualizar owner, prazo e status.`;

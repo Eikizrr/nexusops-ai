@@ -63,6 +63,8 @@ function serializeActivity(activity: {
 }
 
 async function ensureSeeded() {
+  await prisma.user.deleteMany({ where: { email: "erick@portfolio.dev" } });
+
   const count = await prisma.project.count();
   if (count === 0) {
     await prisma.project.createMany({
@@ -74,14 +76,14 @@ async function ensureSeeded() {
   }
 
   await prisma.user.upsert({
-    where: { email: "erick@portfolio.dev" },
+    where: { email: "demo@nexusops.ai" },
     update: {},
     create: {
       id: randomUUID(),
-      name: "Erick Dev",
-      email: "erick@portfolio.dev",
+      name: "Nexus Demo",
+      email: "demo@nexusops.ai",
       role: "admin",
-      passwordHash: hashPassword("Portfolio@2026"),
+      passwordHash: hashPassword("NexusDemo@2026"),
       createdAt: new Date()
     }
   });

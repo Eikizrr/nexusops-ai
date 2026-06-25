@@ -1,8 +1,8 @@
 import type { User } from "../types";
 
 const AUTH_KEY = "nexusops:user";
-const DEMO_EMAIL = "erick@portfolio.dev";
-const DEMO_PASSWORD = "Portfolio@2026";
+const DEMO_EMAIL = "demo@nexusops.ai";
+const DEMO_PASSWORD = "NexusDemo@2026";
 
 export function getStoredUser(): User | null {
   const raw = localStorage.getItem(AUTH_KEY);
@@ -31,7 +31,7 @@ export function login(email: string, password: string): User {
   const errors = validateCredentials(email, password);
   if (Object.keys(errors).length) throw errors;
 
-  const user: User = { id: crypto.randomUUID(), name: "Erick Dev", email, role: "admin" };
+  const user: User = { id: crypto.randomUUID(), name: "Nexus Demo", email, role: "admin" };
   persistUser(user);
   return user;
 }

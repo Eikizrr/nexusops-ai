@@ -14,7 +14,7 @@ Operational teams often make decisions with fragmented data: project status in o
 - REST API in Express with Prisma ORM persistence for projects and activity history.
 - Live Open-Meteo integration that turns weather data into operational recommendations.
 - Smart alerts combining project deadline, priority, progress and climate risk.
-- Dashboard with KPI cards and visual charts for portfolio health and revenue by status.
+- Dashboard with KPI cards and visual charts for operational health and revenue by status.
 - Audit timeline for created, updated, deleted, AI and weather events.
 - Real-time war room using `BroadcastChannel` for cross-tab chat state.
 - AI copilot endpoint that keeps provider keys on the server and falls back gracefully without `OPENAI_API_KEY`.
@@ -56,8 +56,8 @@ Backend: `http://localhost:3333`
 Demo credentials:
 
 ```txt
-Email: erick@portfolio.dev
-Password: Portfolio@2026
+Email: demo@nexusops.ai
+Password: NexusDemo@2026
 ```
 
 Authentication is handled by the Express API through:
@@ -154,7 +154,7 @@ Recommended deployment path:
 
 ### Fast Demo Deploy
 
-Use this when you want a public portfolio link quickly. It runs the frontend and API as one Node service.
+Use this when you want a public product demo link quickly. It runs the frontend and API as one Node service.
 
 Build command:
 

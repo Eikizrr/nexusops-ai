@@ -22,7 +22,7 @@ describe("projectSchema", () => {
   it("aceita um projeto pronto para entrar no pipeline", () => {
     const result = projectSchema.safeParse({
       client: "Acme Operations",
-      owner: "Erick Dev",
+      owner: "Nexus Demo",
       email: "erick@acme.dev",
       title: "Dashboard de operacoes",
       budget: 12000,

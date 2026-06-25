@@ -3,8 +3,8 @@ import { randomUUID, scryptSync } from "node:crypto";
 import { seedProjects } from "../src/data/seed";
 
 const prisma = new PrismaClient();
-const DEMO_EMAIL = "erick@portfolio.dev";
-const DEMO_PASSWORD = "Portfolio@2026";
+const DEMO_EMAIL = "demo@nexusops.ai";
+const DEMO_PASSWORD = "NexusDemo@2026";
 
 function hashPassword(password: string) {
   const salt = "nexusops-demo-salt";
@@ -12,6 +12,8 @@ function hashPassword(password: string) {
 }
 
 async function main() {
+  await prisma.user.deleteMany({ where: { email: "erick@portfolio.dev" } });
+
   const count = await prisma.project.count();
   if (count === 0) {
     await prisma.project.createMany({
@@ -47,13 +49,13 @@ async function main() {
   await prisma.user.upsert({
     where: { email: DEMO_EMAIL },
     update: {
-      name: "Erick Dev",
+      name: "Nexus Demo",
       role: "admin",
       passwordHash: hashPassword(DEMO_PASSWORD)
     },
     create: {
       id: randomUUID(),
-      name: "Erick Dev",
+      name: "Nexus Demo",
       email: DEMO_EMAIL,
       role: "admin",
       passwordHash: hashPassword(DEMO_PASSWORD),
