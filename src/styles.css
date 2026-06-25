@@ -296,6 +296,12 @@ label span,
   box-shadow: 0 16px 34px rgba(255, 61, 129, 0.24);
 }
 
+.demo-login-button {
+  color: var(--ink) !important;
+  background: var(--sun) !important;
+  box-shadow: 0 16px 34px rgba(255, 209, 102, 0.2) !important;
+}
+
 .demo-card {
   display: flex;
   align-items: center;
@@ -920,6 +926,33 @@ label span,
   background: #ffffff;
 }
 
+.project-tools {
+  display: grid;
+  gap: 10px;
+  min-width: min(100%, 720px);
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.filter-grid select {
+  padding: 10px 11px;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.clear-filters {
+  border: 1px solid rgba(20, 26, 36, 0.14);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #313b49;
+  background: #ffffff;
+  font-weight: 900;
+}
+
 .search-box input {
   border: 0;
   padding-inline: 0;
@@ -1125,6 +1158,28 @@ td > span {
 .chat-form {
   grid-template-columns: 1fr auto;
   margin-top: 14px;
+}
+
+.quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.quick-prompts button {
+  border: 1px solid #e1e9e5;
+  border-radius: 999px;
+  padding: 9px 12px;
+  color: #313b49;
+  background: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.quick-prompts button:hover {
+  border-color: rgba(255, 61, 129, 0.35);
+  background: #fff7fb;
 }
 
 .demo-guide {
@@ -1448,6 +1503,14 @@ td > span {
 
   .search-box {
     width: 100%;
+  }
+
+  .project-tools {
+    min-width: 0;
+  }
+
+  .filter-grid {
+    grid-template-columns: 1fr;
   }
 
   .message {

@@ -24,7 +24,7 @@ import { askCopilot, buildLocalInsight } from "./lib/ai";
 import { fetchWeatherInsight } from "./lib/weather";
 import { loadProjects, ProjectInput, projectSchema, saveProjects, upsertProject } from "./lib/projects";
 import { createActivity, loadActivity, saveActivity } from "./lib/activity";
-import { getProjectsByStatus, getRevenueByStatus, getSmartAlerts } from "./lib/analytics";
+import { getDeliveryRisk, getProjectsByStatus, getRevenueByStatus, getSmartAlerts } from "./lib/analytics";
 import { api } from "./lib/api";
 
 const blankProject: ProjectInput = {
@@ -86,21 +86,31 @@ function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
-  async function submit(event: FormEvent) {
-    event.preventDefault();
-    const nextErrors = validateCredentials(email, password);
+  async function authenticateUser(nextEmail = email, nextPassword = password) {
+    const nextErrors = validateCredentials(nextEmail, nextPassword);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
     setLoading(true);
     try {
-      const { user } = await api.login(email, password);
+      const { user } = await api.login(nextEmail, nextPassword);
       persistUser(user);
       onLogin(user);
     } catch {
-      onLogin(login(email, password));
+      onLogin(login(nextEmail, nextPassword));
     } finally {
       setLoading(false);
     }
+  }
+
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    await authenticateUser();
+  }
+
+  async function enterDemo() {
+    setEmail(demoCredentials.email);
+    setPassword(demoCredentials.password);
+    await authenticateUser(demoCredentials.email, demoCredentials.password);
   }
 
   return (
@@ -138,6 +148,9 @@ function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
           {errors.general && <p className="form-error">{errors.general}</p>}
           <button type="submit" disabled={loading}>
             {loading ? "Validando acesso..." : "Acessar command center"}
+          </button>
+          <button type="button" className="demo-login-button" onClick={enterDemo} disabled={loading}>
+            Entrar como demo
           </button>
         </form>
         <div className="demo-card">
@@ -556,6 +569,12 @@ function ChatPanel({
   ]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
+  const quickPrompts = [
+    "Gere um resumo executivo da operacao.",
+    "Quais projetos estao em maior risco agora?",
+    "O que devo priorizar hoje?",
+    "Crie um plano de acao para as proximas 24 horas."
+  ];
 
   useEffect(() => {
     const channel = new BroadcastChannel("nexusops-chat");
@@ -565,15 +584,14 @@ function ChatPanel({
     return () => channel.close();
   }, []);
 
-  async function sendMessage(event: FormEvent) {
-    event.preventDefault();
-    if (!text.trim() || loading) return;
+  async function submitPrompt(prompt: string) {
+    if (!prompt.trim() || loading) return;
 
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       author: user.name,
       role: "user",
-      body: text.trim(),
+      body: prompt.trim(),
       createdAt: new Date().toISOString()
     };
     setMessages((current) => [...current, userMessage]);
@@ -592,6 +610,11 @@ function ChatPanel({
     setMessages((current) => [...current, aiMessage]);
     new BroadcastChannel("nexusops-chat").postMessage(aiMessage);
     setLoading(false);
+  }
+
+  async function sendMessage(event: FormEvent) {
+    event.preventDefault();
+    await submitPrompt(text);
   }
 
   return (
@@ -613,6 +636,13 @@ function ChatPanel({
         ))}
         {loading && <p className="typing">Copilot analisando estado atual...</p>}
       </div>
+      <div className="quick-prompts" aria-label="Sugestoes rapidas para o copiloto">
+        {quickPrompts.map((prompt) => (
+          <button key={prompt} onClick={() => void submitPrompt(prompt)} disabled={loading}>
+            {prompt}
+          </button>
+        ))}
+      </div>
       <form className="chat-form" onSubmit={sendMessage}>
         <input
           value={text}
@@ -631,6 +661,9 @@ function App() {
   const [activityLog, setActivityLog] = useState<ActivityLog[]>(() => loadActivity());
   const [editing, setEditing] = useState<Project | null>(null);
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | Project["status"]>("all");
+  const [priorityFilter, setPriorityFilter] = useState<"all" | Project["priority"]>("all");
+  const [riskFilter, setRiskFilter] = useState<"all" | "high" | "dueSoon">("all");
   const [weather, setWeather] = useState<WeatherInsight | null>(null);
   const [weatherError, setWeatherError] = useState("");
   const [loadingWeather, setLoadingWeather] = useState(false);
@@ -716,12 +749,20 @@ function App() {
 
   const filteredProjects = useMemo(() => {
     const term = query.toLowerCase();
-    return projects.filter((project) =>
-      [project.client, project.owner, project.title, project.status, project.priority].some((value) =>
+    return projects.filter((project) => {
+      const matchesSearch = [project.client, project.owner, project.title, project.status, project.priority].some((value) =>
         value.toLowerCase().includes(term)
-      )
-    );
-  }, [projects, query]);
+      );
+      const matchesStatus = statusFilter === "all" || project.status === statusFilter;
+      const matchesPriority = priorityFilter === "all" || project.priority === priorityFilter;
+      const daysToDue = Math.ceil((new Date(project.dueDate).getTime() - Date.now()) / 86_400_000);
+      const matchesRisk =
+        riskFilter === "all" ||
+        (riskFilter === "high" && getDeliveryRisk(project, weather) >= 55) ||
+        (riskFilter === "dueSoon" && project.status !== "done" && daysToDue <= 10);
+      return matchesSearch && matchesStatus && matchesPriority && matchesRisk;
+    });
+  }, [projects, query, riskFilter, statusFilter, priorityFilter, weather]);
 
   const metrics = useMemo(() => {
     const total = projects.reduce((sum, project) => sum + project.budget, 0);
@@ -991,9 +1032,45 @@ function App() {
               <p className="eyebrow">Operacoes comerciais</p>
               <h2>Clientes e projetos</h2>
             </div>
-            <div className="search-box">
-              <Search size={18} />
-              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar..." />
+            <div className="project-tools">
+              <div className="search-box">
+                <Search size={18} />
+                <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar..." />
+              </div>
+              <div className="filter-grid">
+                <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}>
+                  <option value="all">Todos status</option>
+                  <option value="lead">Lead</option>
+                  <option value="active">Ativo</option>
+                  <option value="paused">Pausado</option>
+                  <option value="done">Concluido</option>
+                </select>
+                <select
+                  value={priorityFilter}
+                  onChange={(event) => setPriorityFilter(event.target.value as typeof priorityFilter)}
+                >
+                  <option value="all">Todas prioridades</option>
+                  <option value="high">Alta</option>
+                  <option value="medium">Media</option>
+                  <option value="low">Baixa</option>
+                </select>
+                <select value={riskFilter} onChange={(event) => setRiskFilter(event.target.value as typeof riskFilter)}>
+                  <option value="all">Todos riscos</option>
+                  <option value="high">Risco alto</option>
+                  <option value="dueSoon">Prazo proximo</option>
+                </select>
+                <button
+                  className="clear-filters"
+                  onClick={() => {
+                    setQuery("");
+                    setStatusFilter("all");
+                    setPriorityFilter("all");
+                    setRiskFilter("all");
+                  }}
+                >
+                  Limpar
+                </button>
+              </div>
             </div>
           </div>
           <div className="table-wrap">
