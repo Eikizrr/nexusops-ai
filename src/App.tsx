@@ -1,4 +1,4 @@
-import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+﻿import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Activity,
   BarChart3,
@@ -45,12 +45,12 @@ const statusLabel: Record<Project["status"], string> = {
   lead: "Lead",
   active: "Ativo",
   paused: "Pausado",
-  done: "Concluido"
+  done: "Concluído"
 };
 
 const priorityLabel: Record<Project["priority"], string> = {
   low: "Baixa",
-  medium: "Media",
+  medium: "Média",
   high: "Alta"
 };
 
@@ -73,7 +73,7 @@ const sectionItems: { id: AppSection; label: string; helper: string }[] = [
   { id: "overview", label: "Overview", helper: "Resumo executivo" },
   { id: "projects", label: "Projects", helper: "Carteira e CRUD" },
   { id: "intelligence", label: "Intelligence", helper: "Riscos e dados" },
-  { id: "activity", label: "Activity", helper: "Historico" },
+  { id: "activity", label: "Activity", helper: "Histórico" },
   { id: "warroom", label: "War Room", helper: "Chat e IA" },
   { id: "case", label: "Case Study", helper: "Arquitetura" }
 ];
@@ -128,7 +128,7 @@ function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
         <p className="eyebrow">Operations intelligence</p>
         <h1>NexusOps AI</h1>
         <p className="lead">
-          Centralize clientes, projetos, clima operacional e decisoes assistidas por IA em uma experiencia rapida,
+          Centralize clientes, projetos, clima operacional e decisões assistidas por IA em uma experiência rápida,
           segura e orientada por dados.
         </p>
         <form onSubmit={submit} className="auth-form">
@@ -173,14 +173,14 @@ function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
           <span />
           <b>AI</b>
         </div>
-        <strong>Decisoes mais rapidas para times que operam com prazo, clima e receita.</strong>
+        <strong>Decisões mais rápidas para times que operam com prazo, clima e receita.</strong>
         <div className="showcase-grid">
           <div>
             <span>Pipeline</span>
             <b>R$ 91,5k</b>
           </div>
           <div>
-            <span>SLA medio</span>
+            <span>SLA médio</span>
             <b>92%</b>
           </div>
           <div>
@@ -277,8 +277,8 @@ function AlertsPanel({
           ))
         ) : (
           <article className="alert-item">
-            <strong>Operacao estavel</strong>
-            <p>Nenhum risco critico detectado combinando prazo, prioridade, progresso e clima.</p>
+            <strong>Operação estável</strong>
+            <p>Nenhum risco crítico detectado combinando prazo, prioridade, progresso e clima.</p>
           </article>
         )}
       </div>
@@ -296,7 +296,7 @@ function ActivityTimeline({ activity }: { activity: ActivityLog[] }) {
       <div className="section-title">
         <div>
           <p className="eyebrow">Audit trail</p>
-          <h2>Historico de atividades</h2>
+          <h2>Histórico de atividades</h2>
         </div>
         <Activity />
       </div>
@@ -330,7 +330,7 @@ function DemoGuide({
   const steps = [
     {
       title: "1. Leia os KPIs",
-      text: "Comece pelo pipeline, progresso medio e projetos urgentes. Eles sao derivados do estado atual."
+      text: "Comece pelo pipeline, progresso médio e projetos urgentes. Eles são derivados do estado atual."
     },
     {
       title: "2. Veja riscos reais",
@@ -338,7 +338,7 @@ function DemoGuide({
     },
     {
       title: "3. Atualize o fluxo",
-      text: "Crie ou edite um projeto para ver dashboard, timeline e permissoes reagirem."
+      text: "Crie ou edite um projeto para ver dashboard, timeline e permissões reagirem."
     },
     {
       title: "4. Consulte o copiloto",
@@ -356,7 +356,7 @@ function DemoGuide({
       <h2>{current.title}</h2>
       <p>{current.text}</p>
       <button className="primary-action" onClick={step === steps.length - 1 ? onClose : onNext}>
-        {step === steps.length - 1 ? "Concluir" : "Proximo passo"}
+        {step === steps.length - 1 ? "Concluir" : "Próximo passo"}
       </button>
     </aside>
   );
@@ -371,7 +371,7 @@ function ToastStack({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id: st
             <strong>{toast.title}</strong>
             <p>{toast.description}</p>
           </div>
-          <button onClick={() => onDismiss(toast.id)} aria-label="Fechar notificacao">
+          <button onClick={() => onDismiss(toast.id)} aria-label="Fechar notificação">
             ×
           </button>
         </article>
@@ -394,10 +394,10 @@ function ConfirmDialog({
   return (
     <div className="modal-backdrop" role="presentation">
       <section className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
-        <p className="eyebrow">Confirmar exclusao</p>
+        <p className="eyebrow">Confirmar exclusão</p>
         <h2 id="confirm-title">Remover {project.client}?</h2>
         <p>
-          Essa acao tira o projeto da carteira ativa e registra o evento no historico. Use quando o contrato saiu do
+          Essa ação tira o projeto da carteira ativa e registra o evento no histórico. Use quando o contrato saiu do
           fluxo operacional.
         </p>
         <div className="dialog-actions">
@@ -428,43 +428,43 @@ function CaseStudyPanel() {
     "React + TypeScript para interface responsiva e estado de produto",
     "Express como API server e camada segura para IA",
     "Prisma ORM com SQLite local e caminho claro para PostgreSQL",
-    "Open-Meteo como API externa convertida em recomendacao operacional",
+    "Open-Meteo como API externa convertida em recomendação operacional",
     "BroadcastChannel para chat em tempo real entre abas",
-    "Vitest cobrindo validacao, analytics e risco operacional"
+    "Vitest cobrindo validação, analytics e risco operacional"
   ];
 
   return (
     <section className="case-grid">
       <article className="case-hero-card">
         <p className="eyebrow">Product case</p>
-        <h2>NexusOps AI transforma dados soltos em decisao operacional.</h2>
+        <h2>NexusOps AI transforma dados soltos em decisão operacional.</h2>
         <p>
-          O produto foi desenhado para times que precisam acompanhar receita, prazo, risco externo e comunicacao em
-          um unico command center. A experiencia mostra dominio de UX, estado, API, autenticacao, IA e deploy.
+          O produto foi desenhado para times que precisam acompanhar receita, prazo, risco externo e comunicação em
+          um único command center. A experiência mostra domínio de UX, estado, API, autenticação, IA e deploy.
         </p>
       </article>
 
       <article className="case-card">
         <FileText />
         <h3>Problema</h3>
-        <p>Gestores perdem contexto quando clientes, prazos, alertas e decisoes ficam espalhados entre ferramentas.</p>
+        <p>Gestores perdem contexto quando clientes, prazos, alertas e decisões ficam espalhados entre ferramentas.</p>
       </article>
 
       <article className="case-card">
         <Sparkles />
         <h3>Solucao</h3>
-        <p>Um painel unificado com CRUD validado, sinais externos, IA assistiva, auditoria e colaboracao em tempo real.</p>
+        <p>Um painel unificado com CRUD validado, sinais externos, IA assistiva, auditoria e colaboração em tempo real.</p>
       </article>
 
       <article className="case-card">
         <ShieldCheck />
-        <h3>Confianca</h3>
-        <p>Login por API, cookie HTTP-only, roles, fallback offline, testes automatizados e healthcheck publico.</p>
+        <h3>Confiança</h3>
+        <p>Login por API, cookie HTTP-only, roles, fallback offline, testes automatizados e healthcheck público.</p>
       </article>
 
       <article className="case-stack-card">
         <p className="eyebrow">Architecture map</p>
-        <h3>Decisoes tecnicas</h3>
+        <h3>Decisões técnicas</h3>
         <ul>
           {architecture.map((item) => (
             <li key={item}>{item}</li>
@@ -474,7 +474,7 @@ function CaseStudyPanel() {
 
       <article className="case-stack-card impact">
         <p className="eyebrow">What it proves</p>
-        <h3>Competencias demonstradas</h3>
+        <h3>Competências demonstradas</h3>
         <div className="impact-tags">
           <span>Frontend architecture</span>
           <span>REST API</span>
@@ -544,7 +544,7 @@ function ProjectForm({
           {errors.client && <span>{errors.client}</span>}
         </label>
         <label>
-          Responsavel
+          Responsável
           <input value={form.owner} onChange={(event) => update("owner", event.target.value)} />
           {errors.owner && <span>{errors.owner}</span>}
         </label>
@@ -559,7 +559,7 @@ function ProjectForm({
           {errors.title && <span>{errors.title}</span>}
         </label>
         <label>
-          Orcamento
+          Orçamento
           <input
             value={form.budget}
             onChange={(event) => update("budget", Number(event.target.value))}
@@ -585,7 +585,7 @@ function ProjectForm({
             <option value="lead">Lead</option>
             <option value="active">Ativo</option>
             <option value="paused">Pausado</option>
-            <option value="done">Concluido</option>
+            <option value="done">Concluído</option>
           </select>
         </label>
         <label>
@@ -595,7 +595,7 @@ function ProjectForm({
             onChange={(event) => update("priority", event.target.value as Project["priority"])}
           >
             <option value="low">Baixa</option>
-            <option value="medium">Media</option>
+            <option value="medium">Média</option>
             <option value="high">Alta</option>
           </select>
         </label>
@@ -606,13 +606,13 @@ function ProjectForm({
         </label>
       </div>
       <label>
-        Observacoes
+        Observações
         <textarea value={form.notes} onChange={(event) => update("notes", event.target.value)} rows={3} />
         {errors.notes && <span>{errors.notes}</span>}
       </label>
       <button type="submit" className="primary-action">
         <Plus size={18} />
-        {editing ? "Salvar alteracoes" : "Adicionar projeto"}
+        {editing ? "Salvar alterações" : "Adicionar projeto"}
       </button>
     </form>
   );
@@ -639,10 +639,10 @@ function ChatPanel({
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const quickPrompts = [
-    "Gere um resumo executivo da operacao.",
-    "Quais projetos estao em maior risco agora?",
+    "Gere um resumo executivo da operação.",
+    "Quais projetos estáo em maior risco agora?",
     "O que devo priorizar hoje?",
-    "Crie um plano de acao para as proximas 24 horas."
+    "Crie um plano de ação para as próximas 24 horas."
   ];
 
   useEffect(() => {
@@ -705,7 +705,7 @@ function ChatPanel({
         ))}
         {loading && <p className="typing">Copilot analisando estado atual...</p>}
       </div>
-      <div className="quick-prompts" aria-label="Sugestoes rapidas para o copiloto">
+      <div className="quick-prompts" aria-label="Sugestoes rápidas para o copiloto">
         {quickPrompts.map((prompt) => (
           <button key={prompt} onClick={() => void submitPrompt(prompt)} disabled={loading}>
             {prompt}
@@ -777,7 +777,7 @@ function App() {
         pushToast({
           tone: "warning",
           title: "Modo offline ativo",
-          description: "A API local nao respondeu. A interface usara dados salvos no navegador."
+          description: "A API local não respondeu. A interface usará dados salvos no navegador."
         })
       )
       .finally(() => setBootstrapping(false));
@@ -805,7 +805,7 @@ function App() {
       pushToast({
         tone: "error",
         title: "Falha ao atualizar clima",
-        description: "A API externa nao respondeu agora. Os dados locais continuam disponiveis."
+        description: "A API externa não respondeu agora. Os dados locais continuam disponíveis."
       });
     } finally {
       setLoadingWeather(false);
@@ -850,7 +850,7 @@ function App() {
     const next = { ...user, role };
     persistUser(next);
     setUser(next);
-    pushActivity("updated", "Permissao alterada", `Perfil ativo mudou para ${roleLabel[role]}.`);
+    pushActivity("updated", "Permissão alterada", `Perfil ativo mudou para ${roleLabel[role]}.`);
   }
 
   async function handleSave(input: ProjectInput, id?: string) {
@@ -874,7 +874,7 @@ function App() {
       pushToast({
         tone: "warning",
         title: "Salvo localmente",
-        description: "Backend indisponivel no momento. O navegador manteve a alteracao."
+        description: "Backend indisponível no momento. O navegador manteve a alteração."
       });
     }
   }
@@ -895,8 +895,8 @@ function App() {
       // Fallback local keeps the demo fully usable without the API process.
       pushToast({
         tone: "warning",
-        title: "Exclusao local",
-        description: "A API nao respondeu, mas a interface ja removeu o item localmente."
+        title: "Exclusão local",
+        description: "A API não respondeu, mas a interface ja removeu o item localmente."
       });
     }
   }
@@ -917,17 +917,17 @@ function App() {
       <header className="topbar">
         <div>
           <p className="eyebrow">NexusOps AI</p>
-          <h1>Command center para receita, projetos e decisoes operacionais.</h1>
+          <h1>Command center para receita, projetos e decisões operacionais.</h1>
           <p className="header-copy">
-            Uma visao executiva do funil, com dados externos, estado em tempo real e copiloto para transformar
-            movimento em acao.
+            Uma visão executiva do funil, com dados externos, estado em tempo real e copiloto para transformar
+            movimento em ação.
           </p>
           <div className="quick-actions">
             <button
               onClick={() => {
                 setDemoStep(0);
                 setActiveSection("overview");
-                pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentacao do produto foi acionado.");
+                pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentação do produto foi acionado.");
               }}
             >
               <Sparkles size={17} />
@@ -948,7 +948,7 @@ function App() {
             </button>
           </div>
         </div>
-        <aside className="hero-console" aria-label="Console visual de operacoes">
+        <aside className="hero-console" aria-label="Console visual de operações">
           <div className="radar">
             <span />
             <span />
@@ -998,7 +998,7 @@ function App() {
         </div>
       </header>
 
-      <nav className="section-tabs" aria-label="Navegacao principal do produto">
+      <nav className="section-tabs" aria-label="Navegação principal do produto">
         {sectionItems.map((item) => (
           <button
             key={item.id}
@@ -1017,15 +1017,15 @@ function App() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">Executive overview</p>
-              <h2>O que precisa de decisao agora</h2>
+              <h2>O que precisa de decisão agora</h2>
             </div>
             <span>{projects.length} projetos monitorados</span>
           </div>
           <section className="metrics-grid">
             <MetricCard icon={<LayoutDashboard />} label="Pipeline" value={currency(metrics.total)} helper="Receita mapeada" />
-            <MetricCard icon={<Activity />} label="Projetos ativos" value={String(metrics.active)} helper="Execucao em andamento" />
-            <MetricCard icon={<Check />} label="Progresso medio" value={`${metrics.avgProgress}%`} helper="Atualizado pelo fluxo" />
-            <MetricCard icon={<CalendarClock />} label="Prioridade alta" value={String(metrics.urgent)} helper="Demandam atencao" />
+            <MetricCard icon={<Activity />} label="Projetos ativos" value={String(metrics.active)} helper="Execução em andamento" />
+            <MetricCard icon={<Check />} label="Progresso médio" value={`${metrics.avgProgress}%`} helper="Atualizado pelo fluxo" />
+            <MetricCard icon={<CalendarClock />} label="Prioridade alta" value={String(metrics.urgent)} helper="Demandam atenção" />
           </section>
 
           <section className="dashboard-grid">
@@ -1033,7 +1033,7 @@ function App() {
           <div className="section-title">
             <div>
               <p className="eyebrow">Open-Meteo live</p>
-              <h2>Inteligencia operacional</h2>
+              <h2>Inteligência operacional</h2>
             </div>
             <button className="icon-button" onClick={refreshWeather} disabled={loadingWeather} aria-label="Atualizar clima">
               <RefreshCw size={18} />
@@ -1048,7 +1048,7 @@ function App() {
                 </strong>
                 <p>{weather.recommendation}</p>
                 <span>
-                  Proximas 12h: {weather.avgNext12hTemp} C media, {weather.rainRisk}% risco de chuva, vento maximo{" "}
+                  Próximas 12h: {weather.avgNext12hTemp} C média, {weather.rainRisk}% risco de chuva, vento máximo{" "}
                   {weather.maxWindNext12h} km/h.
                 </span>
               </div>
@@ -1079,7 +1079,7 @@ function App() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">Commercial operations</p>
-              <h2>Carteira, criacao e manutencao de projetos</h2>
+              <h2>Carteira, criação e manutenção de projetos</h2>
             </div>
             <span>{filteredProjects.length} resultado(s)</span>
           </div>
@@ -1089,7 +1089,7 @@ function App() {
         ) : (
           <section className="permission-card">
             <ShieldCheck />
-            <p className="eyebrow">Permissao de leitura</p>
+            <p className="eyebrow">Permissão de leitura</p>
             <h2>Analyst acompanha indicadores sem alterar carteira</h2>
             <p>Troque para Manager ou Admin para criar, editar e remover projetos.</p>
           </section>
@@ -1098,7 +1098,7 @@ function App() {
         <section className="project-list">
           <div className="section-title">
             <div>
-              <p className="eyebrow">Operacoes comerciais</p>
+              <p className="eyebrow">Operações comerciais</p>
               <h2>Clientes e projetos</h2>
             </div>
             <div className="project-tools">
@@ -1112,7 +1112,7 @@ function App() {
                   <option value="lead">Lead</option>
                   <option value="active">Ativo</option>
                   <option value="paused">Pausado</option>
-                  <option value="done">Concluido</option>
+                  <option value="done">Concluído</option>
                 </select>
                 <select
                   value={priorityFilter}
@@ -1120,13 +1120,13 @@ function App() {
                 >
                   <option value="all">Todas prioridades</option>
                   <option value="high">Alta</option>
-                  <option value="medium">Media</option>
+                  <option value="medium">Média</option>
                   <option value="low">Baixa</option>
                 </select>
                 <select value={riskFilter} onChange={(event) => setRiskFilter(event.target.value as typeof riskFilter)}>
                   <option value="all">Todos riscos</option>
                   <option value="high">Risco alto</option>
-                  <option value="dueSoon">Prazo proximo</option>
+                  <option value="dueSoon">Prazo próximo</option>
                 </select>
                 <button
                   className="clear-filters"
@@ -1151,7 +1151,7 @@ function App() {
                   <th>Prioridade</th>
                   <th>Progresso</th>
                   <th>Valor</th>
-                  <th>Acoes</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -1179,7 +1179,7 @@ function App() {
                       {project.progress}%
                     </td>
                     <td data-label="Valor">{currency(project.budget)}</td>
-                    <td data-label="Acoes">
+                    <td data-label="Ações">
                       {canManage ? (
                         <div className="row-actions">
                           <button className="icon-button" onClick={() => setEditing(project)} aria-label="Editar">
@@ -1213,7 +1213,7 @@ function App() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">Decision intelligence</p>
-              <h2>Riscos, graficos e sinais externos</h2>
+              <h2>Riscos, gráficos e sinais externos</h2>
             </div>
             <span>{alerts.length || 1} sinal(is) ativos</span>
           </div>
@@ -1223,7 +1223,7 @@ function App() {
               onStartDemo={() => {
                 setDemoStep(0);
                 setActiveSection("overview");
-                pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentacao do produto foi acionado.");
+                pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentação do produto foi acionado.");
               }}
             />
             <MiniBarChart title="Projetos por status" caption="Operational health" data={statusChart} />

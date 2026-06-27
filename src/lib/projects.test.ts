@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 import { projectSchema } from "./projects";
 
 describe("projectSchema", () => {
@@ -24,13 +24,13 @@ describe("projectSchema", () => {
       client: "Acme Operations",
       owner: "Nexus Demo",
       email: "erick@acme.dev",
-      title: "Dashboard de operacoes",
+      title: "Dashboard de operações",
       budget: 12000,
       progress: 40,
       status: "active",
       priority: "high",
       dueDate: "2026-08-20",
-      notes: "Entrega com integracao de dados e IA."
+      notes: "Entrega com integração de dados e IA."
     });
 
     expect(result.success).toBe(true);

@@ -1,11 +1,11 @@
-import type { Project, WeatherInsight } from "../types";
+﻿import type { Project, WeatherInsight } from "../types";
 
 export function getProjectsByStatus(projects: Project[]) {
   const labels: Record<Project["status"], string> = {
     lead: "Lead",
     active: "Ativo",
     paused: "Pausado",
-    done: "Concluido"
+    done: "Concluído"
   };
 
   return (Object.keys(labels) as Project["status"][]).map((status) => ({
@@ -44,8 +44,8 @@ export function getSmartAlerts(projects: Project[], weather?: WeatherInsight | n
 
   const alerts = risky.map(({ project, risk }) => ({
     id: `risk-${project.id}`,
-    title: `${project.client} exige atencao`,
-    description: `${project.title} esta com risco ${risk}% por prazo, prioridade ou progresso.`,
+    title: `${project.client} exige atenção`,
+    description: `${project.title} está com risco ${risk}% por prazo, prioridade ou progresso.`,
     severity: risk >= 80 ? "critical" : "warning"
   }));
 
@@ -53,7 +53,7 @@ export function getSmartAlerts(projects: Project[], weather?: WeatherInsight | n
     alerts.unshift({
       id: "weather-risk",
       title: "Risco climatico elevado",
-      description: `${weather.rainRisk}% de chance de chuva nas proximas 12h. Replaneje atividades externas.`,
+      description: `${weather.rainRisk}% de chance de chuva nas próximas 12h. Replaneje atividades externas.`,
       severity: "critical"
     });
   }

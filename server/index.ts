@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import { randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -103,13 +103,13 @@ app.post("/api/auth/login", async (req, res, next) => {
   try {
     await ensureSeeded();
     const { email, password } = req.body as { email?: string; password?: string };
-    if (!email || !password) return res.status(400).json({ error: "E-mail e senha sao obrigatorios." });
+    if (!email || !password) return res.status(400).json({ error: "E-mail e senha são obrigatórios." });
 
     const user = await authenticate(email, password);
-    if (!user) return res.status(401).json({ error: "Credenciais invalidas." });
+    if (!user) return res.status(401).json({ error: "Credenciais inválidas." });
 
     createSession(res, user.id);
-    await recordActivity("updated", "Sessao iniciada", `${user.name} acessou o command center.`);
+    await recordActivity("updated", "Sessão iniciada", `${user.name} acessou o command center.`);
     res.json({ user });
   } catch (error) {
     next(error);
@@ -119,7 +119,7 @@ app.post("/api/auth/login", async (req, res, next) => {
 app.get("/api/auth/me", async (req, res, next) => {
   try {
     const user = await getSessionUser(req);
-    if (!user) return res.status(401).json({ error: "Sessao expirada." });
+    if (!user) return res.status(401).json({ error: "Sessão expirada." });
     res.json({ user });
   } catch (error) {
     next(error);
@@ -130,7 +130,7 @@ app.post("/api/auth/logout", async (req, res, next) => {
   try {
     const user = await getSessionUser(req);
     clearSession(req, res);
-    if (user) await recordActivity("updated", "Sessao encerrada", `${user.name} saiu do command center.`);
+    if (user) await recordActivity("updated", "Sessão encerrada", `${user.name} saiu do command center.`);
     res.status(204).send();
   } catch (error) {
     next(error);
@@ -172,7 +172,7 @@ app.put("/api/projects/:id", async (req, res, next) => {
     if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
 
     const current = await prisma.project.findUnique({ where: { id: req.params.id } });
-    if (!current) return res.status(404).json({ error: "Projeto nao encontrado." });
+    if (!current) return res.status(404).json({ error: "Projeto não encontrado." });
 
     const project = await prisma.project.update({
       where: { id: req.params.id },
@@ -188,7 +188,7 @@ app.put("/api/projects/:id", async (req, res, next) => {
 app.delete("/api/projects/:id", async (req, res, next) => {
   try {
     const current = await prisma.project.findUnique({ where: { id: req.params.id } });
-    if (!current) return res.status(404).json({ error: "Projeto nao encontrado." });
+    if (!current) return res.status(404).json({ error: "Projeto não encontrado." });
 
     await prisma.project.delete({ where: { id: req.params.id } });
     await recordActivity("deleted", "Projeto removido", `${current.client} saiu da carteira ativa.`);
@@ -220,7 +220,7 @@ app.post("/api/ai-chat", async (req, res, next) => {
     };
 
     if (!prompt) {
-      return res.status(400).json({ error: "Prompt obrigatorio." });
+      return res.status(400).json({ error: "Prompt obrigatório." });
     }
 
     if (!apiKey) {
@@ -243,7 +243,7 @@ app.post("/api/ai-chat", async (req, res, next) => {
           {
             role: "system",
             content:
-              "Voce e um copiloto de operacoes. Responda em portugues do Brasil com recomendacoes objetivas, usando os projetos e o clima recebidos como contexto."
+              "Você e um copiloto de operações. Responda em português do Brasil com recomendacoes objetivas, usando os projetos e o clima recebidos como contexto."
           },
           {
             role: "user",
@@ -259,7 +259,7 @@ app.post("/api/ai-chat", async (req, res, next) => {
 
     const data = (await response.json()) as { output_text?: string };
     await recordActivity("ai", "Copiloto consultado", "Resposta gerada pelo provedor de IA configurado no backend.");
-    return res.json({ answer: data.output_text ?? "Nao consegui gerar uma resposta agora." });
+    return res.json({ answer: data.output_text ?? "Não consegui gerar uma resposta agora." });
   } catch (error) {
     next(error);
   }

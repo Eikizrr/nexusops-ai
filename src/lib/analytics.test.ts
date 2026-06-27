@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 import type { Project } from "../types";
 import { getDeliveryRisk, getRevenueByStatus, getSmartAlerts } from "./analytics";
 
@@ -7,7 +7,7 @@ const baseProject: Project = {
   client: "Acme",
   owner: "Erick",
   email: "ops@acme.dev",
-  title: "Operacao critica",
+  title: "Operação critica",
   budget: 10000,
   progress: 30,
   status: "active",

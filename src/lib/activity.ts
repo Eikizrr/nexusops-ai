@@ -1,4 +1,4 @@
-import type { ActivityLog } from "../types";
+﻿import type { ActivityLog } from "../types";
 import { readStorage, writeStorage } from "./storage";
 
 const ACTIVITY_KEY = "nexusops:activity";
@@ -9,7 +9,7 @@ export function loadActivity() {
       id: "a-001",
       type: "weather",
       title: "Clima operacional sincronizado",
-      description: "Open-Meteo conectado ao centro de decisoes para apoiar prazos e atividades externas.",
+      description: "Open-Meteo conectado ao centro de decisões para apoiar prazos e atividades externas.",
       createdAt: new Date(Date.now() - 1000 * 60 * 35).toISOString()
     },
     {

@@ -1,4 +1,4 @@
-import type { WeatherInsight } from "../types";
+﻿import type { WeatherInsight } from "../types";
 
 type OpenMeteoResponse = {
   current: {
