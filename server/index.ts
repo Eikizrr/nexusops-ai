@@ -99,6 +99,10 @@ async function recordActivity(type: ActivityLog["type"], title: string, descript
   });
 }
 
+function demoAiAnswer() {
+  return "Analisando o estado atual, eu priorizaria projetos de alta prioridade com progresso abaixo de 50%, revisaria prazos próximos e acompanharia os alertas climáticos antes de confirmar atividades externas. Para a próxima ação, foque nos itens com maior impacto financeiro e maior risco de atraso.";
+}
+
 app.post("/api/auth/login", async (req, res, next) => {
   try {
     await ensureSeeded();
@@ -225,10 +229,7 @@ app.post("/api/ai-chat", async (req, res, next) => {
 
     if (!apiKey) {
       await recordActivity("ai", "Copiloto consultado", "Resposta demonstrativa gerada com base no estado operacional.");
-      return res.json({
-        answer:
-          "Analisando o estado atual, eu priorizaria projetos de alta prioridade com progresso abaixo de 50%, revisaria prazos próximos e acompanharia os alertas climáticos antes de confirmar atividades externas. Para a próxima ação, foque nos itens com maior impacto financeiro e maior risco de atraso."
-      });
+      return res.json({ answer: demoAiAnswer() });
     }
 
     const response = await fetch("https://api.openai.com/v1/responses", {
@@ -254,7 +255,9 @@ app.post("/api/ai-chat", async (req, res, next) => {
     });
 
     if (!response.ok) {
-      return res.status(502).json({ error: "Falha ao consultar provedor de IA." });
+      console.warn(`OpenAI provider returned ${response.status}. Falling back to demo answer.`);
+      await recordActivity("ai", "Copiloto consultado", "Provedor de IA indisponível; resposta demonstrativa enviada.");
+      return res.json({ answer: demoAiAnswer() });
     }
 
     const data = (await response.json()) as { output_text?: string };
