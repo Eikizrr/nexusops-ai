@@ -82,7 +82,97 @@ function currency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
+function PublicLanding({ onEnter }: { onEnter: () => void }) {
+  const capabilities = [
+    { label: "CRUD validado", value: "Zod + API" },
+    { label: "Dados reais", value: "Open-Meteo" },
+    { label: "Tempo real", value: "BroadcastChannel" },
+    { label: "Deploy", value: "Render" }
+  ];
+
+  return (
+    <main
+      className="public-page"
+      onMouseMove={(event) => {
+        event.currentTarget.style.setProperty("--mx", `${event.clientX}px`);
+        event.currentTarget.style.setProperty("--my", `${event.clientY}px`);
+      }}
+    >
+      <section className="public-hero">
+        <nav className="public-nav">
+          <div className="brand-line">
+            <span className="brand-mark small">NO</span>
+            <strong>NexusOps AI</strong>
+          </div>
+          <button onClick={onEnter}>Entrar na demo</button>
+        </nav>
+
+        <div className="public-copy">
+          <p className="eyebrow">Operations intelligence platform</p>
+          <h1>Decisões operacionais com projeto, receita, clima e IA no mesmo painel.</h1>
+          <p>
+            Um command center para acompanhar carteira de clientes, priorizar entregas, transformar API externa em
+            recomendação útil e colaborar em tempo real com um copiloto preparado para IA real.
+          </p>
+          <div className="public-actions">
+            <button className="primary-action" onClick={onEnter}>
+              Acessar ambiente demo
+              <Sparkles size={18} />
+            </button>
+            <a href="https://github.com/Eikizrr/nexusops-ai" target="_blank" rel="noreferrer">
+              Ver arquitetura
+            </a>
+          </div>
+        </div>
+
+        <aside className="product-preview" aria-label="Prévia visual do painel NexusOps AI">
+          <div className="preview-toolbar">
+            <span />
+            <span />
+            <span />
+            <strong>Live Ops</strong>
+          </div>
+          <div className="preview-kpis">
+            <div>
+              <small>Pipeline</small>
+              <b>R$ 91,5k</b>
+            </div>
+            <div>
+              <small>Risco</small>
+              <b>3 sinais</b>
+            </div>
+            <div>
+              <small>IA</small>
+              <b>Demo ativa</b>
+            </div>
+          </div>
+          <div className="preview-chart">
+            <i style={{ height: "58%" }} />
+            <i style={{ height: "82%" }} />
+            <i style={{ height: "44%" }} />
+            <i style={{ height: "70%" }} />
+            <i style={{ height: "92%" }} />
+          </div>
+          <div className="preview-message">
+            <Bot size={18} />
+            <p>Priorize o projeto com maior risco financeiro e prazo mais próximo.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section className="public-capabilities">
+        {capabilities.map((item) => (
+          <article key={item.label}>
+            <span>{item.label}</span>
+            <strong>{item.value}</strong>
+          </article>
+        ))}
+      </section>
+    </main>
+  );
+}
+
+function LoginScreen({ onLogin, onBack }: { onLogin: (user: User) => void; onBack: () => void }) {
   const [email, setEmail] = useState(demoCredentials.email);
   const [password, setPassword] = useState(demoCredentials.password);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -124,6 +214,9 @@ function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
       }}
     >
       <section className="login-panel">
+        <button type="button" className="back-link" onClick={onBack}>
+          Voltar para visão pública
+        </button>
         <div className="brand-mark">NO</div>
         <p className="eyebrow">Operations intelligence</p>
         <h1>NexusOps AI</h1>
@@ -452,7 +545,7 @@ function CaseStudyPanel() {
 
       <article className="case-card">
         <Sparkles />
-        <h3>Solucao</h3>
+        <h3>Solução</h3>
         <p>Um painel unificado com CRUD validado, sinais externos, IA assistiva, auditoria e colaboração em tempo real.</p>
       </article>
 
@@ -720,7 +813,7 @@ function ChatPanel({
         ))}
         {loading && <p className="typing">Copilot analisando estado atual...</p>}
       </div>
-      <div className="quick-prompts" aria-label="Sugestoes rápidas para o copiloto">
+      <div className="quick-prompts" aria-label="Sugestões rápidas para o copiloto">
         {quickPrompts.map((prompt) => (
           <button key={prompt} onClick={() => void submitPrompt(prompt)} disabled={loading}>
             {prompt}
@@ -741,6 +834,7 @@ function ChatPanel({
 
 function App() {
   const [user, setUser] = useState<User | null>(() => getStoredUser());
+  const [showLogin, setShowLogin] = useState(() => Boolean(getStoredUser()));
   const [projects, setProjects] = useState<Project[]>(() => loadProjects());
   const [activityLog, setActivityLog] = useState<ActivityLog[]>(() => loadActivity());
   const [editing, setEditing] = useState<Project | null>(null);
@@ -874,7 +968,7 @@ function App() {
     pushToast({
       tone: "success",
       title: id ? "Projeto atualizado" : "Projeto criado",
-      description: `${input.client} ja aparece nos indicadores e na timeline.`
+      description: `${input.client} já aparece nos indicadores e na timeline.`
     });
     setEditing(null);
 
@@ -911,12 +1005,18 @@ function App() {
       pushToast({
         tone: "warning",
         title: "Exclusão local",
-        description: "A API não respondeu, mas a interface ja removeu o item localmente."
+        description: "A API não respondeu, mas a interface já removeu o item localmente."
       });
     }
   }
 
-  if (!user) return <LoginScreen onLogin={setUser} />;
+  if (!user) {
+    return showLogin ? (
+      <LoginScreen onLogin={setUser} onBack={() => setShowLogin(false)} />
+    ) : (
+      <PublicLanding onEnter={() => setShowLogin(true)} />
+    );
+  }
 
   const canManage = user.role !== "analyst";
 
@@ -959,7 +1059,7 @@ function App() {
               }}
             >
               <Bell size={17} />
-              Ver urgencias
+              Ver urgências
             </button>
           </div>
         </div>
@@ -1059,11 +1159,11 @@ function App() {
               <CloudSun size={42} />
               <div>
                 <strong>
-                  {weather.city} - {weather.currentTemperature} C
+                  {weather.city} - {weather.currentTemperature} °C
                 </strong>
                 <p>{weather.recommendation}</p>
                 <span>
-                  Próximas 12h: {weather.avgNext12hTemp} C média, {weather.rainRisk}% risco de chuva, vento máximo{" "}
+                  Próximas 12h: {weather.avgNext12hTemp} °C média, {weather.rainRisk}% risco de chuva, vento máximo{" "}
                   {weather.maxWindNext12h} km/h.
                 </span>
               </div>

@@ -52,7 +52,7 @@ export function getSmartAlerts(projects: Project[], weather?: WeatherInsight | n
   if (weather && weather.rainRisk >= 70) {
     alerts.unshift({
       id: "weather-risk",
-      title: "Risco climatico elevado",
+      title: "Risco climático elevado",
       description: `${weather.rainRisk}% de chance de chuva nas próximas 12h. Replaneje atividades externas.`,
       severity: "critical"
     });

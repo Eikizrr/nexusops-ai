@@ -26,6 +26,8 @@ Operational teams often make decisions with fragmented data: project status in o
 ## Highlights
 
 - Authenticated demo experience with role-based UI for `Admin`, `Manager` and `Analyst`.
+- Public product landing page before authentication, designed as a real SaaS entry point.
+- One-click demo access from the login screen.
 - Server-side login with HTTP-only session cookies and a seeded demo user.
 - Full project CRUD with schema validation through Zod.
 - REST API in Express with Prisma ORM persistence for projects and activity history.
@@ -35,6 +37,7 @@ Operational teams often make decisions with fragmented data: project status in o
 - Audit timeline for created, updated, deleted, AI and weather events.
 - Real-time war room using `BroadcastChannel` for cross-tab chat state.
 - AI copilot endpoint that keeps provider keys on the server and falls back gracefully without `OPENAI_API_KEY`.
+- Dynamic demo copilot that reads project risk, deadlines, progress and weather even without paid AI credits.
 - Automated tests for validation, risk scoring and analytics.
 
 ## Tech Stack
@@ -51,12 +54,13 @@ Operational teams often make decisions with fragmented data: project status in o
 
 ## Product Demo Flow
 
-1. Sign in with the demo credentials shown on the login screen.
-2. Review pipeline, progress, high-priority work and smart alerts.
-3. Start the guided demo to walk through the product story.
-4. Create or edit a project and watch KPIs, charts and timeline update.
-5. Switch the active role to `Analyst` to see read-only permissions.
-6. Ask the war room copilot what should be prioritized.
+1. Open the public landing page and enter the demo environment.
+2. Use the one-click demo login or the credentials shown on the login screen.
+3. Review pipeline, progress, high-priority work and smart alerts.
+4. Start the guided demo to walk through the product story.
+5. Create or edit a project and watch KPIs, charts and timeline update.
+6. Switch the active role to `Analyst` to see read-only permissions.
+7. Ask the war room copilot what should be prioritized.
 
 ## Product Sections
 
@@ -98,7 +102,7 @@ The browser receives an HTTP-only session cookie, while the UI keeps a local fal
 
 ## AI Configuration
 
-The app works without an AI key using a local operational fallback. To enable provider-backed responses, set:
+The app works without an AI key using a dynamic operational fallback based on the current projects and weather state. To enable provider-backed responses, set:
 
 ```bash
 OPENAI_API_KEY=your_key_here
@@ -208,7 +212,7 @@ Health check path:
 /api/health
 ```
 
-This SQLite demo mode is simple and works well for presenting the product. Some free hosting filesystems can reset between deploys, so use PostgreSQL for durable production data.
+This SQLite demo mode is simple and works well for presenting the product. Some free hosting filesystems can reset between deploys, so use PostgreSQL for durable production data. Do not set `NODE_ENV=production` manually on Render unless the build still installs dev build tools such as TypeScript and Vite.
 
 ### Production Database Path
 
