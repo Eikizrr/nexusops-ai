@@ -638,20 +638,35 @@ function ChatPanel({
   ]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
+  const tabId = useMemo(() => crypto.randomUUID(), []);
   const quickPrompts = [
     "Gere um resumo executivo da operação.",
-    "Quais projetos estáo em maior risco agora?",
+    "Quais projetos estão em maior risco agora?",
     "O que devo priorizar hoje?",
     "Crie um plano de ação para as próximas 24 horas."
   ];
 
   useEffect(() => {
     const channel = new BroadcastChannel("nexusops-chat");
-    channel.onmessage = (event: MessageEvent<ChatMessage>) => {
-      setMessages((current) => [...current, event.data]);
+    channel.onmessage = (event: MessageEvent<ChatMessage & { sourceId?: string }>) => {
+      if (event.data.sourceId === tabId) return;
+      const message: ChatMessage = {
+        id: event.data.id,
+        author: event.data.author,
+        role: event.data.role,
+        body: event.data.body,
+        createdAt: event.data.createdAt
+      };
+      setMessages((current) => (current.some((item) => item.id === message.id) ? current : [...current, message]));
     };
     return () => channel.close();
-  }, []);
+  }, [tabId]);
+
+  function broadcastMessage(message: ChatMessage) {
+    const channel = new BroadcastChannel("nexusops-chat");
+    channel.postMessage({ ...message, sourceId: tabId });
+    channel.close();
+  }
 
   async function submitPrompt(prompt: string) {
     if (!prompt.trim() || loading) return;
@@ -664,7 +679,7 @@ function ChatPanel({
       createdAt: new Date().toISOString()
     };
     setMessages((current) => [...current, userMessage]);
-    new BroadcastChannel("nexusops-chat").postMessage(userMessage);
+    broadcastMessage(userMessage);
     setText("");
     setLoading(true);
 
@@ -677,7 +692,7 @@ function ChatPanel({
       createdAt: new Date().toISOString()
     };
     setMessages((current) => [...current, aiMessage]);
-    new BroadcastChannel("nexusops-chat").postMessage(aiMessage);
+    broadcastMessage(aiMessage);
     setLoading(false);
   }
 
