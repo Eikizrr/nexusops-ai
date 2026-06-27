@@ -7,6 +7,7 @@ import {
   CalendarClock,
   Check,
   CloudSun,
+  FileText,
   LayoutDashboard,
   LogOut,
   Pencil,
@@ -66,14 +67,15 @@ type Toast = {
   tone: "success" | "warning" | "error";
 };
 
-type AppSection = "overview" | "projects" | "intelligence" | "activity" | "warroom";
+type AppSection = "overview" | "projects" | "intelligence" | "activity" | "warroom" | "case";
 
 const sectionItems: { id: AppSection; label: string; helper: string }[] = [
   { id: "overview", label: "Overview", helper: "Resumo executivo" },
   { id: "projects", label: "Projects", helper: "Carteira e CRUD" },
   { id: "intelligence", label: "Intelligence", helper: "Riscos e dados" },
   { id: "activity", label: "Activity", helper: "Historico" },
-  { id: "warroom", label: "War Room", helper: "Chat e IA" }
+  { id: "warroom", label: "War Room", helper: "Chat e IA" },
+  { id: "case", label: "Case Study", helper: "Arquitetura" }
 ];
 
 function currency(value: number) {
@@ -418,6 +420,73 @@ function SkeletonBlock({ lines = 3 }: { lines?: number }) {
         <span key={index} />
       ))}
     </div>
+  );
+}
+
+function CaseStudyPanel() {
+  const architecture = [
+    "React + TypeScript para interface responsiva e estado de produto",
+    "Express como API server e camada segura para IA",
+    "Prisma ORM com SQLite local e caminho claro para PostgreSQL",
+    "Open-Meteo como API externa convertida em recomendacao operacional",
+    "BroadcastChannel para chat em tempo real entre abas",
+    "Vitest cobrindo validacao, analytics e risco operacional"
+  ];
+
+  return (
+    <section className="case-grid">
+      <article className="case-hero-card">
+        <p className="eyebrow">Product case</p>
+        <h2>NexusOps AI transforma dados soltos em decisao operacional.</h2>
+        <p>
+          O produto foi desenhado para times que precisam acompanhar receita, prazo, risco externo e comunicacao em
+          um unico command center. A experiencia mostra dominio de UX, estado, API, autenticacao, IA e deploy.
+        </p>
+      </article>
+
+      <article className="case-card">
+        <FileText />
+        <h3>Problema</h3>
+        <p>Gestores perdem contexto quando clientes, prazos, alertas e decisoes ficam espalhados entre ferramentas.</p>
+      </article>
+
+      <article className="case-card">
+        <Sparkles />
+        <h3>Solucao</h3>
+        <p>Um painel unificado com CRUD validado, sinais externos, IA assistiva, auditoria e colaboracao em tempo real.</p>
+      </article>
+
+      <article className="case-card">
+        <ShieldCheck />
+        <h3>Confianca</h3>
+        <p>Login por API, cookie HTTP-only, roles, fallback offline, testes automatizados e healthcheck publico.</p>
+      </article>
+
+      <article className="case-stack-card">
+        <p className="eyebrow">Architecture map</p>
+        <h3>Decisoes tecnicas</h3>
+        <ul>
+          {architecture.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article className="case-stack-card impact">
+        <p className="eyebrow">What it proves</p>
+        <h3>Competencias demonstradas</h3>
+        <div className="impact-tags">
+          <span>Frontend architecture</span>
+          <span>REST API</span>
+          <span>Auth</span>
+          <span>Prisma</span>
+          <span>AI integration</span>
+          <span>Data UX</span>
+          <span>Responsive UI</span>
+          <span>Deploy</span>
+        </div>
+      </article>
+    </section>
   );
 }
 
@@ -1186,6 +1255,19 @@ function App() {
             <span>BroadcastChannel + Copilot</span>
           </div>
           <ChatPanel projects={projects} weather={weather} user={user} />
+        </section>
+      )}
+
+      {activeSection === "case" && (
+        <section className="section-view">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Case study</p>
+              <h2>Como o NexusOps AI foi pensado</h2>
+            </div>
+            <span>Produto + engenharia</span>
+          </div>
+          <CaseStudyPanel />
         </section>
       )}
       <DemoGuide

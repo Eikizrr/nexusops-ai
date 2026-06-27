@@ -1,6 +1,23 @@
 # NexusOps AI
 
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Express](https://img.shields.io/badge/Express-API-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![Render](https://img.shields.io/badge/Deploy-Render-46E3B7?logo=render&logoColor=111827)](https://nexusops-ai.onrender.com/)
+
+![NexusOps AI preview](public/og-card.svg)
+
 NexusOps AI is an operations command center for teams that manage clients, project delivery, revenue pipeline and external risk signals. It combines a validated project workflow, live weather intelligence, real-time collaboration and an AI copilot in one responsive interface.
+
+## Live Demo
+
+App: https://nexusops-ai.onrender.com/
+
+```txt
+Email: demo@nexusops.ai
+Password: NexusDemo@2026
+```
 
 ## Why It Exists
 
@@ -40,6 +57,15 @@ Operational teams often make decisions with fragmented data: project status in o
 4. Create or edit a project and watch KPIs, charts and timeline update.
 5. Switch the active role to `Analyst` to see read-only permissions.
 6. Ask the war room copilot what should be prioritized.
+
+## Product Sections
+
+- `Overview`: executive KPIs, weather intelligence and derived operational summary.
+- `Projects`: validated CRUD, role-aware actions, filters and responsive project table.
+- `Intelligence`: smart alerts and visual analytics for status and revenue.
+- `Activity`: audit trail for important system events.
+- `War Room`: real-time chat state and AI copilot prompts.
+- `Case Study`: product reasoning, architecture map and technical competencies.
 
 ## Running Locally
 

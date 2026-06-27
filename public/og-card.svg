@@ -1,0 +1,23 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#070A13"/>
+  <circle cx="160" cy="110" r="260" fill="#FF3D81" opacity="0.28"/>
+  <circle cx="1060" cy="70" r="250" fill="#00F5D4" opacity="0.2"/>
+  <circle cx="900" cy="540" r="280" fill="#4D6BFF" opacity="0.26"/>
+  <rect x="74" y="72" width="1052" height="486" rx="28" fill="white" opacity="0.08" stroke="white" stroke-opacity="0.2"/>
+  <rect x="118" y="116" width="240" height="398" rx="18" fill="white" opacity="0.12"/>
+  <rect x="398" y="116" width="684" height="112" rx="18" fill="white" opacity="0.12"/>
+  <rect x="398" y="260" width="208" height="112" rx="18" fill="#FF3D81" opacity="0.9"/>
+  <rect x="638" y="260" width="208" height="112" rx="18" fill="#4D6BFF" opacity="0.9"/>
+  <rect x="878" y="260" width="204" height="112" rx="18" fill="#00F5D4" opacity="0.9"/>
+  <rect x="398" y="404" width="684" height="110" rx="18" fill="white" opacity="0.12"/>
+  <text x="142" y="168" fill="white" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800">NexusOps AI</text>
+  <text x="142" y="212" fill="#FFD166" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">OPERATIONS COMMAND CENTER</text>
+  <text x="142" y="282" fill="white" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="900">Dados, IA e</text>
+  <text x="142" y="344" fill="white" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="900">decisao em</text>
+  <text x="142" y="406" fill="white" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="900">tempo real.</text>
+  <text x="428" y="162" fill="white" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800">Dashboard operacional com CRUD validado, auth backend, API real e copiloto de IA.</text>
+  <text x="428" y="326" fill="white" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="900">Riscos</text>
+  <text x="668" y="326" fill="white" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="900">Projetos</text>
+  <text x="908" y="326" fill="#070A13" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="900">Insights</text>
+  <text x="428" y="466" fill="white" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">React + TypeScript + Express + Prisma + Open-Meteo + AI</text>
+</svg>
