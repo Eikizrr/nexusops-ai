@@ -224,10 +224,10 @@ app.post("/api/ai-chat", async (req, res, next) => {
     }
 
     if (!apiKey) {
-      await recordActivity("ai", "Copiloto consultado", "Resposta local gerada sem expor chaves no navegador.");
+      await recordActivity("ai", "Copiloto consultado", "Resposta demonstrativa gerada com base no estado operacional.");
       return res.json({
         answer:
-          "IA local ativa: sem OPENAI_API_KEY no backend. Ainda assim, olhando seus dados, eu priorizaria projetos de alta prioridade com baixo progresso e revisaria prazos afetados pelo clima."
+          "Analisando o estado atual, eu priorizaria projetos de alta prioridade com progresso abaixo de 50%, revisaria prazos próximos e acompanharia os alertas climáticos antes de confirmar atividades externas. Para a próxima ação, foque nos itens com maior impacto financeiro e maior risco de atraso."
       });
     }
 

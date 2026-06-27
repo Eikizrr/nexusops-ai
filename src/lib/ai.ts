@@ -44,5 +44,5 @@ export async function askCopilot(prompt: string, projects: Project[], weather?: 
     // Local fallback keeps the product demo useful without backend or API keys.
   }
 
-  return `${buildLocalInsight(projects, weather)} Sugestão: ataque primeiro itens de alta prioridade com progresso abaixo de 50% e use o CRUD para atualizar owner, prazo e status.`;
+  return `${buildLocalInsight(projects, weather)} Sugestão: ataque primeiro itens de alta prioridade com progresso abaixo de 50% e atualize responsável, prazo e status no fluxo de projetos.`;
 }
