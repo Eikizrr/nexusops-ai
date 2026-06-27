@@ -109,7 +109,7 @@ function PublicLanding({ onEnter }: { onEnter: () => void }) {
 
         <div className="public-copy">
           <p className="eyebrow">Operations intelligence platform</p>
-          <h1>Decisões operacionais com projeto, receita, clima e IA no mesmo painel.</h1>
+          <h1>Operação, receita, clima e IA no mesmo painel.</h1>
           <p>
             Um command center para acompanhar carteira de clientes, priorizar entregas, transformar API externa em
             recomendação útil e colaborar em tempo real com um copiloto preparado para IA real.

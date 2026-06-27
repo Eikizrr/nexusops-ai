@@ -104,7 +104,7 @@ h2 {
   --mx: 50vw;
   --my: 50vh;
   min-height: 100vh;
-  padding: 28px;
+  padding: 24px;
   color: white;
   background:
     radial-gradient(520px circle at var(--mx) var(--my), rgba(255, 209, 102, 0.2), transparent 42%),
@@ -114,13 +114,14 @@ h2 {
 }
 
 .public-hero {
-  min-height: calc(100vh - 56px);
+  min-height: auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 520px);
   align-items: center;
   gap: 34px;
   width: min(1260px, 100%);
   margin: 0 auto;
+  padding: 92px 0 30px;
 }
 
 .public-nav {
@@ -165,20 +166,22 @@ h2 {
 }
 
 .public-copy {
-  padding-top: 70px;
+  padding-top: 0;
 }
 
 .public-copy h1 {
-  max-width: 850px;
-  font-size: clamp(3rem, 7vw, 6.6rem);
+  max-width: 760px;
+  margin-bottom: 18px;
+  font-size: clamp(3rem, 5.2vw, 5rem);
+  line-height: 0.98;
   letter-spacing: 0;
 }
 
 .public-copy p {
-  max-width: 690px;
+  max-width: 660px;
   color: rgba(255, 255, 255, 0.74);
-  font-size: 1.08rem;
-  line-height: 1.7;
+  font-size: 1.02rem;
+  line-height: 1.62;
 }
 
 .public-actions {
@@ -196,6 +199,7 @@ h2 {
   position: relative;
   display: grid;
   gap: 16px;
+  align-self: center;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 8px;
   padding: 18px;
@@ -262,7 +266,7 @@ h2 {
 }
 
 .preview-chart {
-  height: 250px;
+  height: 230px;
   display: flex;
   align-items: end;
   gap: 12px;
@@ -313,7 +317,8 @@ h2 {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
-  margin: -105px auto 0;
+  margin: 0 auto;
+  padding-bottom: 24px;
 }
 
 .public-capabilities article {
@@ -1789,13 +1794,25 @@ td > span {
 }
 
 @media (max-width: 1100px) {
-  .public-hero,
   .login-page,
   .metrics-grid,
   .dashboard-grid,
   .workspace,
   .intelligence-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-hero {
+    grid-template-columns: 1fr;
+    padding-top: 92px;
+  }
+
+  .public-copy h1 {
+    max-width: 900px;
+  }
+
+  .product-preview {
+    width: min(620px, 100%);
   }
 
   .workspace {
@@ -1842,7 +1859,7 @@ td > span {
 
   .public-hero {
     min-height: auto;
-    padding-top: 78px;
+    padding-top: 86px;
   }
 
   .public-nav {
@@ -1855,7 +1872,8 @@ td > span {
   }
 
   .public-copy h1 {
-    font-size: clamp(2.5rem, 14vw, 4.2rem);
+    font-size: clamp(2.35rem, 12vw, 3.8rem);
+    line-height: 1.02;
   }
 
   .preview-kpis,
