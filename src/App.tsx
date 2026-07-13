@@ -70,16 +70,29 @@ type Toast = {
 type AppSection = "overview" | "projects" | "intelligence" | "activity" | "warroom" | "case";
 
 const sectionItems: { id: AppSection; label: string; helper: string }[] = [
-  { id: "overview", label: "Overview", helper: "Resumo executivo" },
-  { id: "projects", label: "Projects", helper: "Carteira e CRUD" },
-  { id: "intelligence", label: "Intelligence", helper: "Riscos e dados" },
-  { id: "activity", label: "Activity", helper: "Histórico" },
-  { id: "warroom", label: "War Room", helper: "Chat e IA" },
-  { id: "case", label: "Case Study", helper: "Arquitetura" }
+  { id: "overview", label: "Dashboard", helper: "Operações" },
+  { id: "projects", label: "Projetos", helper: "Operações" },
+  { id: "intelligence", label: "Clima & Risco", helper: "Operações" },
+  { id: "activity", label: "Atividades", helper: "Comunicação" },
+  { id: "warroom", label: "Copiloto", helper: "IA Copilot" },
+  { id: "case", label: "Relatórios", helper: "Operações" }
 ];
 
 function currency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function sectionIcon(id: AppSection) {
+  const icons: Record<AppSection, ReactNode> = {
+    overview: <LayoutDashboard size={17} />,
+    projects: <FileText size={17} />,
+    intelligence: <CloudSun size={17} />,
+    activity: <Activity size={17} />,
+    warroom: <Bot size={17} />,
+    case: <BarChart3 size={17} />
+  };
+
+  return icons[id];
 }
 
 function PublicLanding({ onEnter }: { onEnter: () => void }) {
@@ -1029,103 +1042,78 @@ function App() {
       }}
     >
       <div className="ambient-layer" aria-hidden="true" />
-      <header className="topbar">
-        <div>
-          <p className="eyebrow">NexusOps AI</p>
-          <h1>Command center para receita, projetos e decisões operacionais.</h1>
-          <p className="header-copy">
-            Uma visão executiva do funil, com dados externos, estado em tempo real e copiloto para transformar
-            movimento em ação.
-          </p>
-          <div className="quick-actions">
-            <button
-              onClick={() => {
-                setDemoStep(0);
-                setActiveSection("overview");
-                pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentação do produto foi acionado.");
-              }}
-            >
-              <Sparkles size={17} />
-              Demo guiada
-            </button>
-            <button onClick={refreshWeather}>
-              <RefreshCw size={17} />
-              Atualizar sinais
-            </button>
-            <button
-              onClick={() => {
-                setQuery("high");
-                setActiveSection("projects");
-              }}
-            >
-              <Bell size={17} />
-              Ver urgências
-            </button>
+      <section className="ops-frame">
+        <aside className="sidebar" aria-label="Navegação lateral do NexusOps AI">
+          <div className="sidebar-brand">
+            <span className="brand-mark small">NO</span>
+            <strong>NexusOps AI</strong>
           </div>
-        </div>
-        <aside className="hero-console" aria-label="Console visual de operações">
-          <div className="radar">
-            <span />
-            <span />
-            <span />
-            <b>{metrics.urgent}</b>
-          </div>
-          <div className="console-stack">
+          <nav className="section-tabs" aria-label="Navegação principal do produto">
+            {["Operações", "Comunicação", "IA Copilot"].map((group) => (
+              <div className="sidebar-group" key={group}>
+                <span>{group}</span>
+                {sectionItems
+                  .filter((item) => item.helper === group)
+                  .map((item) => (
+                    <button
+                      key={item.id}
+                      className={activeSection === item.id ? "active" : ""}
+                      onClick={() => setActiveSection(item.id)}
+                      aria-current={activeSection === item.id ? "page" : undefined}
+                    >
+                      {sectionIcon(item.id)}
+                      <strong>{item.label}</strong>
+                    </button>
+                  ))}
+              </div>
+            ))}
+          </nav>
+          <div className="sidebar-user">
+            <span>{user.name.slice(0, 2).toUpperCase()}</span>
             <div>
-              <span>Risk pulse</span>
-              <strong>{alerts.length || 1} sinais</strong>
-            </div>
-            <div>
-              <span>Weather API</span>
-              <strong>{weather ? `${weather.rainRisk}% chuva` : "sync"}</strong>
-            </div>
-            <div>
-              <span>AI copilot</span>
-              <strong>online</strong>
+              <strong>{user.name}</strong>
+              <small>{roleLabel[user.role]}</small>
             </div>
           </div>
         </aside>
-        <div className="topbar-actions">
-          <label className="role-switcher">
-            Perfil
-            <select value={user.role} onChange={(event) => updateRole(event.target.value as UserRole)}>
-              <option value="admin">Admin</option>
-              <option value="manager">Manager</option>
-              <option value="analyst">Analyst</option>
-            </select>
-          </label>
-          <span className="user-chip">{user.name}</span>
-          <button
-            className="ghost"
-            onClick={async () => {
-              try {
-                await api.logout();
-              } catch {
-                // Local fallback covers demos without the backend process.
-              }
-              logout();
-              setUser(null);
-            }}
-          >
-            <LogOut size={18} />
-            Sair
-          </button>
-        </div>
-      </header>
 
-      <nav className="section-tabs" aria-label="Navegação principal do produto">
-        {sectionItems.map((item) => (
-          <button
-            key={item.id}
-            className={activeSection === item.id ? "active" : ""}
-            onClick={() => setActiveSection(item.id)}
-            aria-current={activeSection === item.id ? "page" : undefined}
-          >
-            <strong>{item.label}</strong>
-            <span>{item.helper}</span>
-          </button>
-        ))}
-      </nav>
+        <section className="ops-main">
+          <header className="topbar">
+            <div>
+              <p className="eyebrow">Visão Geral das Operações</p>
+              <h1>Panorama executivo em tempo real da sua operação</h1>
+              <p className="header-copy">Receita, riscos, clima e copiloto reunidos em um painel operacional.</p>
+            </div>
+            <div className="topbar-actions">
+              <label className="role-switcher">
+                Live OPS
+                <select value={user.role} onChange={(event) => updateRole(event.target.value as UserRole)}>
+                  <option value="admin">Admin</option>
+                  <option value="manager">Manager</option>
+                  <option value="analyst">Analyst</option>
+                </select>
+              </label>
+              <button onClick={refreshWeather} className="ghost">
+                <RefreshCw size={17} />
+                Atualizar
+              </button>
+              <button
+                className="ghost"
+                onClick={async () => {
+                  try {
+                    await api.logout();
+                  } catch {
+                    // Local fallback covers demos without the backend process.
+                  }
+                  logout();
+                  setUser(null);
+                }}
+              >
+                <LogOut size={18} />
+                Sair
+              </button>
+            </div>
+          </header>
 
       {activeSection === "overview" && (
         <section className="section-view">
@@ -1385,6 +1373,8 @@ function App() {
           <CaseStudyPanel />
         </section>
       )}
+        </section>
+      </section>
       <DemoGuide
         step={demoStep}
         onNext={() => setDemoStep((current) => (current === null ? 0 : current + 1))}
