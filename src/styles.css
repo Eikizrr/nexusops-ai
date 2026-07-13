@@ -2134,6 +2134,185 @@ td > span {
   background: rgba(255, 61, 129, 0.12);
 }
 
+.revenue-donut-card,
+.health-bars-card {
+  min-height: 330px;
+}
+
+.donut-layout {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.donut-chart {
+  width: min(210px, 100%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(8, 16, 33, 1) 0 43%, transparent 44%),
+    conic-gradient(var(--aqua) 0 35%, var(--violet) 35% 60%, var(--hot) 60% 80%, #ff9f1c 80% 100%);
+  box-shadow: 0 0 50px rgba(0, 245, 212, 0.12);
+}
+
+.donut-chart strong,
+.donut-chart span {
+  grid-area: 1 / 1;
+}
+
+.donut-chart strong {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.donut-chart span {
+  margin-top: 34px;
+  color: rgba(226, 232, 240, 0.56);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.donut-legend {
+  display: grid;
+  gap: 14px;
+}
+
+.donut-legend div {
+  display: grid;
+  grid-template-columns: 12px minmax(90px, 1fr) 44px 80px;
+  align-items: center;
+  gap: 10px;
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.86rem;
+}
+
+.donut-legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.donut-legend b,
+.donut-legend strong {
+  color: #f8fafc;
+}
+
+.vertical-bars {
+  height: 250px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 24px;
+  padding: 18px 4px 0;
+  background:
+    repeating-linear-gradient(to top, rgba(148, 163, 184, 0.09) 0 1px, transparent 1px 42px);
+}
+
+.vertical-bars div {
+  height: 100%;
+  display: grid;
+  align-items: end;
+  gap: 10px;
+  text-align: center;
+}
+
+.vertical-bars span {
+  width: 44px;
+  justify-self: center;
+  border-radius: 8px 8px 3px 3px;
+  background: linear-gradient(180deg, #22d3ee, #2563eb);
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.18);
+}
+
+.vertical-bars span[data-index="1"] {
+  background: linear-gradient(180deg, #a78bfa, #7c3aed);
+}
+
+.vertical-bars span[data-index="2"] {
+  background: linear-gradient(180deg, #fb7185, #e11d48);
+}
+
+.vertical-bars span[data-index="3"] {
+  background: linear-gradient(180deg, #2dd4bf, #0f766e);
+}
+
+.vertical-bars strong {
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.78rem;
+}
+
+.external-risk-card {
+  grid-column: span 1;
+}
+
+.risk-strip {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, 0.75fr) 1.1fr;
+  gap: 10px;
+}
+
+.risk-strip > div {
+  min-height: 88px;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 10px;
+  padding: 12px;
+  background: rgba(6, 13, 28, 0.62);
+}
+
+.risk-strip svg {
+  color: #7dd3fc;
+}
+
+.risk-strip strong {
+  color: white;
+}
+
+.risk-strip span,
+.risk-strip small {
+  color: rgba(226, 232, 240, 0.58);
+  font-size: 0.78rem;
+}
+
+.risk-strip .risk-level {
+  background: rgba(255, 159, 28, 0.1);
+}
+
+.risk-strip .risk-level strong {
+  color: #ffb454;
+}
+
+.copilot-summary-card {
+  display: grid;
+  align-content: start;
+}
+
+.copilot-summary-card p {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 10px;
+  padding: 14px;
+  background: rgba(6, 13, 28, 0.58);
+}
+
+.copilot-summary-card .primary-action {
+  width: max-content;
+  margin-top: 4px;
+  padding-inline: 14px;
+  background: linear-gradient(135deg, #7c3aed, #4c1d95);
+  box-shadow: 0 16px 34px rgba(124, 58, 237, 0.2);
+}
+
+.readonly-chip {
+  color: rgba(226, 232, 240, 0.74);
+  background: rgba(148, 163, 184, 0.12);
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;

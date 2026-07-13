@@ -1,23 +1,25 @@
 ﻿import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Activity,
+  AlertTriangle,
   BarChart3,
   Bell,
   Bot,
-  CalendarClock,
-  Check,
   CloudSun,
+  FolderKanban,
   FileText,
   LayoutDashboard,
   LogOut,
+  MessageCircle,
   Pencil,
   Plus,
   RefreshCw,
   Search,
+  Settings,
   ShieldCheck,
   Sparkles,
   Trash2,
-  Users
+  UserCog,
 } from "lucide-react";
 import type { ActivityLog, ChatMessage, Project, User, UserRole, WeatherInsight } from "./types";
 import { demoCredentials, getStoredUser, login, logout, persistUser, validateCredentials } from "./lib/auth";
@@ -67,15 +69,31 @@ type Toast = {
   tone: "success" | "warning" | "error";
 };
 
-type AppSection = "overview" | "projects" | "intelligence" | "activity" | "warroom" | "case";
+type AppSection =
+  | "overview"
+  | "projects"
+  | "pipeline"
+  | "activity"
+  | "intelligence"
+  | "alerts"
+  | "reports"
+  | "warroom"
+  | "copilot"
+  | "users"
+  | "settings";
 
 const sectionItems: { id: AppSection; label: string; helper: string }[] = [
   { id: "overview", label: "Dashboard", helper: "Operações" },
   { id: "projects", label: "Projetos", helper: "Operações" },
+  { id: "pipeline", label: "Pipeline", helper: "Operações" },
+  { id: "activity", label: "Atividades", helper: "Operações" },
   { id: "intelligence", label: "Clima & Risco", helper: "Operações" },
-  { id: "activity", label: "Atividades", helper: "Comunicação" },
-  { id: "warroom", label: "Copiloto", helper: "IA Copilot" },
-  { id: "case", label: "Relatórios", helper: "Operações" }
+  { id: "alerts", label: "Alertas", helper: "Operações" },
+  { id: "reports", label: "Relatórios", helper: "Operações" },
+  { id: "warroom", label: "Sala de Guerra", helper: "Comunicação" },
+  { id: "copilot", label: "Copiloto", helper: "IA Copilot" },
+  { id: "users", label: "Usuários", helper: "Configurações" },
+  { id: "settings", label: "Configurações", helper: "Configurações" }
 ];
 
 function currency(value: number) {
@@ -86,10 +104,15 @@ function sectionIcon(id: AppSection) {
   const icons: Record<AppSection, ReactNode> = {
     overview: <LayoutDashboard size={17} />,
     projects: <FileText size={17} />,
+    pipeline: <FolderKanban size={17} />,
+    alerts: <Bell size={17} />,
+    reports: <BarChart3 size={17} />,
     intelligence: <CloudSun size={17} />,
     activity: <Activity size={17} />,
-    warroom: <Bot size={17} />,
-    case: <BarChart3 size={17} />
+    warroom: <MessageCircle size={17} />,
+    copilot: <Bot size={17} />,
+    users: <UserCog size={17} />,
+    settings: <Settings size={17} />
   };
 
   return icons[id];
@@ -353,6 +376,120 @@ function MiniBarChart({
           </div>
         ))}
       </div>
+    </article>
+  );
+}
+
+function RevenueDonut({ total }: { total: number }) {
+  const segments = [
+    { label: "Prospecção", percent: 35, value: total * 0.35, color: "var(--aqua)" },
+    { label: "Negociação", percent: 25, value: total * 0.25, color: "var(--violet)" },
+    { label: "Proposta", percent: 20, value: total * 0.2, color: "var(--hot)" },
+    { label: "Contrato", percent: 20, value: total * 0.2, color: "#ff9f1c" }
+  ];
+
+  return (
+    <article className="chart-card revenue-donut-card">
+      <div className="section-title">
+        <div>
+          <p className="eyebrow">Receita por Status</p>
+          <h2>Distribuição do pipeline de receita</h2>
+        </div>
+      </div>
+      <div className="donut-layout">
+        <div className="donut-chart" aria-label="Receita total no pipeline">
+          <strong>{currency(total)}</strong>
+          <span>Total</span>
+        </div>
+        <div className="donut-legend">
+          {segments.map((segment) => (
+            <div key={segment.label}>
+              <i style={{ background: segment.color }} />
+              <span>{segment.label}</span>
+              <b>{segment.percent}%</b>
+              <strong>{currency(segment.value)}</strong>
+            </div>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function HealthBars({ data }: { data: { label: string; value: number }[] }) {
+  const max = Math.max(...data.map((item) => item.value), 1);
+
+  return (
+    <article className="chart-card health-bars-card">
+      <div className="section-title">
+        <div>
+          <p className="eyebrow">Saúde dos Projetos</p>
+          <h2>Quantidade de projetos por status</h2>
+        </div>
+      </div>
+      <div className="vertical-bars">
+        {data.map((item, index) => (
+          <div key={item.label}>
+            <span style={{ height: `${Math.max((item.value / max) * 100, item.value ? 22 : 4)}%` }} data-index={index} />
+            <strong>{item.label}</strong>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function ExternalRiskCard({ weather, error }: { weather: WeatherInsight | null; error?: string }) {
+  return (
+    <article className="weather-card external-risk-card">
+      <div className="section-title">
+        <div>
+          <p className="eyebrow">Sinais de Risco Externo</p>
+          <h2>Condições climáticas que podem impactar seus projetos</h2>
+        </div>
+      </div>
+      <div className="risk-strip">
+        <div>
+          <CloudSun size={34} />
+          <strong>{weather?.city ?? "São Paulo, SP"}</strong>
+          <span>{weather?.recommendation ?? error ?? "Chuva moderada"}</span>
+        </div>
+        <div>
+          <strong>{weather ? `${weather.currentTemperature}°C` : "22°C"}</strong>
+          <span>Temperatura</span>
+        </div>
+        <div>
+          <strong>{weather ? `${weather.rainRisk}%` : "85%"}</strong>
+          <span>Umidade</span>
+        </div>
+        <div>
+          <strong>{weather ? `${weather.maxWindNext12h} km/h` : "18 km/h"}</strong>
+          <span>Vento</span>
+        </div>
+        <div className="risk-level">
+          <span>Risco para projetos</span>
+          <strong>{weather && weather.rainRisk >= 70 ? "Alto" : "Moderado"}</strong>
+          <small>Impacto possível nas entregas</small>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function CopilotSummaryCard({ projects, weather, onOpen }: { projects: Project[]; weather: WeatherInsight | null; onOpen: () => void }) {
+  return (
+    <article className="insight-card copilot-summary-card">
+      <div className="section-title">
+        <div>
+          <p className="eyebrow">Copiloto de IA</p>
+          <h2>Recomendação gerada com base nos dados atuais</h2>
+        </div>
+      </div>
+      <p>{buildLocalInsight(projects, weather)}</p>
+      <button className="primary-action" onClick={onOpen}>
+        <Sparkles size={17} />
+        Abrir copiloto
+      </button>
     </article>
   );
 }
@@ -1049,7 +1186,7 @@ function App() {
             <strong>NexusOps AI</strong>
           </div>
           <nav className="section-tabs" aria-label="Navegação principal do produto">
-            {["Operações", "Comunicação", "IA Copilot"].map((group) => (
+            {["Operações", "Comunicação", "IA Copilot", "Configurações"].map((group) => (
               <div className="sidebar-group" key={group}>
                 <span>{group}</span>
                 {sectionItems
@@ -1080,8 +1217,14 @@ function App() {
         <section className="ops-main">
           <header className="topbar">
             <div>
-              <p className="eyebrow">Visão Geral das Operações</p>
-              <h1>Panorama executivo em tempo real da sua operação</h1>
+              <p className="eyebrow">
+                {activeSection === "overview" ? "Visão Geral das Operações" : sectionItems.find((item) => item.id === activeSection)?.label}
+              </p>
+              <h1>
+                {activeSection === "overview"
+                  ? "Panorama executivo em tempo real da sua operação"
+                  : "Módulo operacional integrado ao command center NexusOps AI"}
+              </h1>
               <p className="header-copy">Receita, riscos, clima e copiloto reunidos em um painel operacional.</p>
             </div>
             <div className="topbar-actions">
@@ -1095,7 +1238,7 @@ function App() {
               </label>
               <button onClick={refreshWeather} className="ghost">
                 <RefreshCw size={17} />
-                Atualizar
+                {loadingWeather ? "Sincronizando" : "Atualizar"}
               </button>
               <button
                 className="ghost"
@@ -1125,55 +1268,18 @@ function App() {
             <span>{projects.length} projetos monitorados</span>
           </div>
           <section className="metrics-grid">
-            <MetricCard icon={<LayoutDashboard />} label="Pipeline" value={currency(metrics.total)} helper="Receita mapeada" />
-            <MetricCard icon={<Activity />} label="Projetos ativos" value={String(metrics.active)} helper="Execução em andamento" />
-            <MetricCard icon={<Check />} label="Progresso médio" value={`${metrics.avgProgress}%`} helper="Atualizado pelo fluxo" />
-            <MetricCard icon={<CalendarClock />} label="Prioridade alta" value={String(metrics.urgent)} helper="Demandam atenção" />
+            <MetricCard icon={<LayoutDashboard />} label="Receita no Pipeline" value={currency(metrics.total)} helper="+12,4% vs mês anterior" />
+            <MetricCard icon={<AlertTriangle />} label="Projetos em Risco" value={String(metrics.urgent)} helper="Atenção necessária" />
+            <MetricCard icon={<Bell />} label="Alertas Ativos" value={String(alerts.length || 1)} helper="Requerem ação" />
+            <MetricCard icon={<Sparkles />} label="IA Copiloto" value="Ativo" helper="Assistência operacional" />
           </section>
 
           <section className="dashboard-grid">
-        <article className="weather-card">
-          <div className="section-title">
-            <div>
-              <p className="eyebrow">Open-Meteo live</p>
-              <h2>Inteligência operacional</h2>
-            </div>
-            <button className="icon-button" onClick={refreshWeather} disabled={loadingWeather} aria-label="Atualizar clima">
-              <RefreshCw size={18} />
-            </button>
-          </div>
-          {weather ? (
-            <div className="weather-content">
-              <CloudSun size={42} />
-              <div>
-                <strong>
-                  {weather.city} - {weather.currentTemperature} °C
-                </strong>
-                <p>{weather.recommendation}</p>
-                <span>
-                  Próximas 12h: {weather.avgNext12hTemp} °C média, {weather.rainRisk}% risco de chuva, vento máximo{" "}
-                  {weather.maxWindNext12h} km/h.
-                </span>
-              </div>
-            </div>
-          ) : (
-            <>
-              {loadingWeather && <SkeletonBlock lines={3} />}
-              {!loadingWeather && <p className="muted">{weatherError}</p>}
-            </>
-          )}
-        </article>
-        <article className="insight-card">
-          <div className="section-title">
-            <div>
-              <p className="eyebrow">Estado derivado</p>
-              <h2>Leitura executiva</h2>
-            </div>
-            <Users />
-          </div>
-          <p>{buildLocalInsight(projects, weather)}</p>
-        </article>
-      </section>
+            <RevenueDonut total={metrics.total} />
+            <HealthBars data={statusChart.map((item) => ({ label: item.label, value: item.value }))} />
+            <ExternalRiskCard weather={weather} error={weatherError} />
+            <CopilotSummaryCard projects={projects} weather={weather} onOpen={() => setActiveSection("copilot")} />
+          </section>
         </section>
       )}
 
@@ -1311,6 +1417,58 @@ function App() {
         </section>
       )}
 
+      {activeSection === "pipeline" && (
+        <section className="section-view">
+          <section className="dashboard-grid">
+            <RevenueDonut total={metrics.total} />
+            <MiniBarChart title="Receita por status" caption="Pipeline comercial" data={revenueChart} format={currency} />
+          </section>
+          <section className="project-list">
+            <div className="section-title">
+              <div>
+                <p className="eyebrow">Pipeline</p>
+                <h2>Fluxo comercial por cliente</h2>
+              </div>
+              <span className="readonly-chip">{filteredProjects.length} oportunidades</span>
+            </div>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Status</th>
+                    <th>Prioridade</th>
+                    <th>Progresso</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProjects.map((project) => (
+                    <tr key={project.id}>
+                      <td data-label="Cliente">
+                        <strong>{project.client}</strong>
+                        <span>{project.title}</span>
+                      </td>
+                      <td data-label="Status">
+                        <span className={`pill ${project.status}`}>{statusLabel[project.status]}</span>
+                      </td>
+                      <td data-label="Prioridade">{priorityLabel[project.priority]}</td>
+                      <td data-label="Progresso">
+                        <div className="progress">
+                          <span style={{ width: `${project.progress}%` }} />
+                        </div>
+                        {project.progress}%
+                      </td>
+                      <td data-label="Valor">{currency(project.budget)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      )}
+
       {activeSection === "intelligence" && (
         <section className="section-view">
           <div className="section-heading">
@@ -1331,6 +1489,22 @@ function App() {
             />
             <MiniBarChart title="Projetos por status" caption="Operational health" data={statusChart} />
             <MiniBarChart title="Receita por status" caption="Revenue view" data={revenueChart} format={currency} />
+          </section>
+        </section>
+      )}
+
+      {activeSection === "alerts" && (
+        <section className="section-view">
+          <section className="dashboard-grid">
+            <AlertsPanel
+              alerts={alerts}
+              onStartDemo={() => {
+                setDemoStep(0);
+                setActiveSection("overview");
+                pushActivity("demo", "Demo guiada iniciada", "Fluxo de apresentação do produto foi acionado.");
+              }}
+            />
+            <ExternalRiskCard weather={weather} error={weatherError} />
           </section>
         </section>
       )}
@@ -1361,16 +1535,57 @@ function App() {
         </section>
       )}
 
-      {activeSection === "case" && (
+      {activeSection === "copilot" && (
         <section className="section-view">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Case study</p>
-              <h2>Como o NexusOps AI foi pensado</h2>
-            </div>
-            <span>Produto + engenharia</span>
-          </div>
+          <ChatPanel projects={projects} weather={weather} user={user} />
+        </section>
+      )}
+
+      {activeSection === "reports" && (
+        <section className="section-view">
           <CaseStudyPanel />
+        </section>
+      )}
+
+      {activeSection === "users" && (
+        <section className="case-grid">
+          <article className="case-hero-card">
+            <p className="eyebrow">Usuários</p>
+            <h2>Controle de perfis para Admin, Manager e Analyst.</h2>
+            <p>O seletor no topo simula permissões e altera ações de escrita na carteira de projetos.</p>
+          </article>
+          {(["admin", "manager", "analyst"] as UserRole[]).map((role) => (
+            <article className="case-card" key={role}>
+              <UserCog />
+              <h3>{roleLabel[role]}</h3>
+              <p>{role === "analyst" ? "Acesso de leitura para análise operacional." : "Pode criar, editar e remover projetos do pipeline."}</p>
+            </article>
+          ))}
+        </section>
+      )}
+
+      {activeSection === "settings" && (
+        <section className="case-grid">
+          <article className="case-hero-card">
+            <p className="eyebrow">Configurações</p>
+            <h2>Ambiente preparado para API, autenticação, clima e IA.</h2>
+            <p>O sistema roda com fallback demonstrativo e pode ativar OpenAI quando houver chave e billing configurados.</p>
+          </article>
+          <article className="case-card">
+            <Settings />
+            <h3>Ambiente</h3>
+            <p>Render, Express, Prisma, SQLite demo e healthcheck público.</p>
+          </article>
+          <article className="case-card">
+            <ShieldCheck />
+            <h3>Segurança</h3>
+            <p>Login por API, cookie HTTP-only e chave de IA protegida no backend.</p>
+          </article>
+          <article className="case-card">
+            <CloudSun />
+            <h3>Integrações</h3>
+            <p>Open-Meteo ativo para transformar clima em recomendação operacional.</p>
+          </article>
         </section>
       )}
         </section>
