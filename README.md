@@ -1,77 +1,76 @@
 # NexusOps AI
 
+Dashboard operacional para acompanhar projetos, receita, riscos externos e decisões em tempo real.
+
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Express](https://img.shields.io/badge/Express-API-000000?logo=express&logoColor=white)](https://expressjs.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![Render](https://img.shields.io/badge/Deploy-Render-46E3B7?logo=render&logoColor=111827)](https://nexusops-ai.onrender.com/)
 
-![NexusOps AI preview](public/og-card.svg)
+![Preview do NexusOps AI](public/og-card.svg)
 
-NexusOps AI is an operations command center for teams that manage clients, project delivery, revenue pipeline and external risk signals. It combines a validated project workflow, live weather intelligence, real-time collaboration and an AI copilot in one responsive interface.
+## Acesso
 
-## Live Demo
-
-App: https://nexusops-ai.onrender.com/
+Aplicação publicada: https://nexusops-ai.onrender.com/
 
 ```txt
-Email: demo@nexusops.ai
-Password: NexusDemo@2026
+E-mail: demo@nexusops.ai
+Senha: NexusDemo@2026
 ```
 
-## Why It Exists
+## Sobre o Projeto
 
-Operational teams often make decisions with fragmented data: project status in one place, external conditions somewhere else, and decisions buried in chat. NexusOps AI turns those signals into a clear executive view: what is active, what is at risk, what changed recently and what should be prioritized next.
+O NexusOps AI simula um painel de gestão para equipes que precisam decidir prioridades com base em carteira de projetos, prazos, receita, clima e histórico de atividade.
 
-## Highlights
+A proposta foi construir uma aplicação completa, com frontend, backend, autenticação, persistência, integração externa e uma camada de inteligência operacional. O sistema funciona mesmo sem chave de IA configurada, usando um fallback local que analisa os dados atuais do painel.
 
-- Authenticated demo experience with role-based UI for `Admin`, `Manager` and `Analyst`.
-- Public product landing page before authentication, designed as a real SaaS entry point.
-- One-click demo access from the login screen.
-- Server-side login with HTTP-only session cookies and a seeded demo user.
-- Full project CRUD with schema validation through Zod.
-- REST API in Express with Prisma ORM persistence for projects and activity history.
-- Live Open-Meteo integration that turns weather data into operational recommendations.
-- Smart alerts combining project deadline, priority, progress and climate risk.
-- Dashboard with KPI cards and visual charts for operational health and revenue by status.
-- Audit timeline for created, updated, deleted, AI and weather events.
-- Real-time war room using `BroadcastChannel` for cross-tab chat state.
-- AI copilot endpoint that keeps provider keys on the server and falls back gracefully without `OPENAI_API_KEY`.
-- Dynamic demo copilot that reads project risk, deadlines, progress and weather even without paid AI credits.
-- Automated tests for validation, risk scoring and analytics.
+## Principais Funcionalidades
 
-## Tech Stack
+- Login com usuário demo e sessão via cookie HTTP-only.
+- Dashboard dark com navegação lateral no estilo SaaS.
+- CRUD completo de projetos.
+- Validação de formulários com Zod.
+- Perfis `Admin`, `Manager` e `Analyst`, com interface respeitando permissões.
+- Indicadores de receita, progresso, prioridade e risco.
+- Gráficos de pipeline e saúde dos projetos.
+- Integração com a API pública Open-Meteo.
+- Conversão de dados climáticos em recomendação operacional.
+- Chat em tempo real entre abas usando `BroadcastChannel`.
+- Endpoint de copiloto no backend, preparado para usar OpenAI API.
+- Fallback inteligente quando não existe `OPENAI_API_KEY`.
+- Timeline de auditoria para eventos importantes.
+- Layout responsivo para desktop, tablet e mobile.
 
-- React 19
-- TypeScript
-- Vite
-- Express
-- Prisma ORM
-- Zod
-- Vitest
-- Lucide React
-- Open-Meteo public API
+## Stack
 
-## Product Demo Flow
+| Camada | Tecnologias |
+| --- | --- |
+| Frontend | React 19, TypeScript, Vite |
+| UI | CSS customizado, Lucide React |
+| Backend | Node.js, Express |
+| Banco/ORM | Prisma, SQLite |
+| Validação | Zod |
+| Testes | Vitest |
+| Integrações | Open-Meteo, OpenAI-ready endpoint |
+| Deploy | Render |
 
-1. Open the public landing page and enter the demo environment.
-2. Use the one-click demo login or the credentials shown on the login screen.
-3. Review pipeline, progress, high-priority work and smart alerts.
-4. Start the guided demo to walk through the product story.
-5. Create or edit a project and watch KPIs, charts and timeline update.
-6. Switch the active role to `Analyst` to see read-only permissions.
-7. Ask the war room copilot what should be prioritized.
+## Estrutura do Produto
 
-## Product Sections
+O painel principal é dividido em módulos:
 
-- `Overview`: executive KPIs, weather intelligence and derived operational summary.
-- `Projects`: validated CRUD, role-aware actions, filters and responsive project table.
-- `Intelligence`: smart alerts and visual analytics for status and revenue.
-- `Activity`: audit trail for important system events.
-- `War Room`: real-time chat state and AI copilot prompts.
-- `Case Study`: product reasoning, architecture map and technical competencies.
+- **Dashboard**: visão geral de receita, riscos, alertas e copiloto.
+- **Projetos**: criação, edição, filtros e exclusão de projetos.
+- **Pipeline**: leitura comercial da carteira.
+- **Atividades**: histórico de ações realizadas no sistema.
+- **Clima & Risco**: sinais externos e análise de impacto.
+- **Alertas**: prioridades calculadas a partir de prazo, progresso e clima.
+- **Sala de Guerra**: chat em tempo real.
+- **Copiloto**: recomendações baseadas no estado atual.
+- **Usuários**: simulação de perfis e permissões.
+- **Configurações**: visão das integrações e ambiente.
 
-## Running Locally
+## Como Rodar Localmente
 
 ```bash
 npm install
@@ -80,81 +79,80 @@ npm run db:seed
 npm run fullstack
 ```
 
-Frontend: `http://localhost:5173`  
-Backend: `http://localhost:3333`
-
-Demo credentials:
+Frontend:
 
 ```txt
-Email: demo@nexusops.ai
-Password: NexusDemo@2026
+http://localhost:5173
 ```
 
-Authentication is handled by the Express API through:
+Backend:
 
 ```txt
-POST /api/auth/login
-GET  /api/auth/me
-POST /api/auth/logout
+http://localhost:3333
 ```
 
-The browser receives an HTTP-only session cookie, while the UI keeps a local fallback so the demo can still be explored if the backend is offline.
-
-## AI Configuration
-
-The app works without an AI key using a dynamic operational fallback based on the current projects and weather state. To enable provider-backed responses, set:
+## Scripts
 
 ```bash
-OPENAI_API_KEY=your_key_here
-OPENAI_MODEL=gpt-4.1-mini
+npm run dev          # Vite em modo desenvolvimento
+npm run server       # API Express
+npm run fullstack    # Frontend e backend juntos
+npm run db:push      # Inicializa SQLite e Prisma
+npm run db:seed      # Popula usuário demo e dados iniciais
+npm run lint         # ESLint
+npm test             # Testes com Vitest
+npm run build        # Build de produção
 ```
 
-Then run:
-
-```bash
-npm run fullstack
-```
-
-## API Routes
+## Rotas da API
 
 ```txt
+POST   /api/auth/login
+GET    /api/auth/me
+POST   /api/auth/logout
+
 GET    /api/projects
 POST   /api/projects
 PUT    /api/projects/:id
 DELETE /api/projects/:id
+
 GET    /api/activity
-POST   /api/auth/login
-GET    /api/auth/me
-POST   /api/auth/logout
 POST   /api/ai-chat
+GET    /api/health
 ```
 
-Project and activity data are persisted through Prisma. The local development database uses SQLite at `prisma/dev.db`.
+## Integração com IA
 
-## Quality Checks
+O projeto pode rodar de duas formas:
 
-```bash
-npm run lint
-npm test
-npm run build
+1. **Modo demonstrativo**
+   - Não exige chave de API.
+   - O backend retorna uma recomendação baseada nos projetos, prazos, progresso e clima.
+   - Ideal para demo pública.
+
+2. **Modo com provedor**
+   - Usa `OPENAI_API_KEY` no backend.
+   - A chave nunca é exposta no navegador.
+   - Se o provedor falhar, o sistema volta para o fallback local sem quebrar a experiência.
+
+Variáveis opcionais:
+
+```env
+OPENAI_API_KEY=sua_chave
+OPENAI_MODEL=gpt-4.1-mini
 ```
 
-Current status:
+## Banco de Dados
 
-- Lint passing
-- 5 automated tests passing
-- Production build passing
-- `npm audit` reports 0 vulnerabilities
+O projeto usa Prisma com SQLite para facilitar a execução local e o deploy de demonstração.
 
-## Architecture Notes
+```env
+DATABASE_URL=file:./dev.db
+```
 
-The frontend is intentionally resilient: it uses the Express API when available and falls back to browser storage when the backend is offline. This makes the demo easy to open while still showing a production-minded separation between UI, API routes, validation, persistence and external integrations.
+Para um ambiente de produção com dados duráveis, o caminho recomendado é trocar o datasource do Prisma para PostgreSQL e usar uma instância gerenciada, como Render PostgreSQL, Supabase, Railway ou Neon.
 
-The AI integration is routed through the server so API keys never touch the browser. The weather integration runs directly against Open-Meteo because it is a public, keyless data source.
-
-The database layer uses Prisma. Local development is configured with SQLite because it runs anywhere without a database server. For production, switch `prisma/schema.prisma` to PostgreSQL and set `DATABASE_URL` to the managed database connection string.
-
-Example PostgreSQL datasource:
+Exemplo:
 
 ```prisma
 datasource db {
@@ -163,68 +161,56 @@ datasource db {
 }
 ```
 
-Then run:
+## Deploy
 
-```bash
-npx prisma migrate dev --name init
-npm run db:seed
-```
+O deploy atual roda no Render como um serviço Node.
 
-## Deployment
-
-The repository includes:
-
-- `render.yaml` for a Render web service.
-- `Dockerfile` for container-based deployment.
-- `.env.example` with required environment variables.
-- Express production static serving for the Vite build.
-- `/api/health` for deploy health checks.
-
-Recommended deployment path:
-
-### Fast Demo Deploy
-
-Use this when you want a public product demo link quickly. It runs the frontend and API as one Node service.
-
-Build command:
-
-```bash
-npm ci && npm run build
-```
-
-Start command:
-
-```bash
-npm start
-```
-
-Environment variables:
+Configuração usada:
 
 ```txt
+Build command: npm ci && npm run build
+Start command: npm start
+Health check: /api/health
+```
+
+Variável necessária no modo demo:
+
+```env
 DATABASE_URL=file:./dev.db
-OPENAI_MODEL=gpt-4.1-mini
-OPENAI_API_KEY=optional
 ```
 
-Health check path:
+Observação: para este projeto, não é necessário definir `NODE_ENV=production` manualmente no painel do Render. Isso pode impedir a instalação de dependências usadas no build.
+
+## Qualidade
+
+Estado atual das verificações:
 
 ```txt
-/api/health
+Lint: OK
+Testes: OK
+Build: OK
 ```
 
-This SQLite demo mode is simple and works well for presenting the product. Some free hosting filesystems can reset between deploys, so use PostgreSQL for durable production data. Do not set `NODE_ENV=production` manually on Render unless the build still installs dev build tools such as TypeScript and Vite.
+Cobertura principal:
 
-### Production Database Path
+- Validação de dados de projeto.
+- Cálculo de risco operacional.
+- Agrupamento de projetos por status.
+- Receita por status.
 
-1. Create a PostgreSQL database on Render, Railway, Supabase or Neon.
-2. Change Prisma datasource provider to `postgresql`.
-3. Set `DATABASE_URL`, `OPENAI_API_KEY` and `OPENAI_MODEL` in the hosting dashboard.
-4. Replace the local SQLite init script with Prisma migrations.
-5. Run migrations and seed during deploy.
+## Decisões Técnicas
 
-## Next Production Upgrades
+- O frontend possui fallback local para manter a demo utilizável mesmo se a API estiver indisponível.
+- A autenticação real acontece no backend, com cookie HTTP-only.
+- O endpoint de IA fica no servidor para proteger credenciais.
+- A integração climática usa Open-Meteo por ser pública e sem chave.
+- O chat usa `BroadcastChannel` para demonstrar sincronização de estado entre abas.
+- O layout foi construído com CSS próprio para evitar dependência pesada de UI kit.
 
-- Move authentication to HTTP-only cookie sessions or a managed auth provider.
-- Add component tests for the main dashboard interactions.
-- Add a CI pipeline with lint, tests, build and migration checks.
-- Add screenshots and a short demo video to the project page.
+## Melhorias Futuras
+
+- Migrar SQLite para PostgreSQL em produção.
+- Adicionar testes de componentes para fluxos principais.
+- Criar pipeline de CI com lint, testes e build.
+- Adicionar persistência dedicada para mensagens do chat.
+- Incluir capturas reais da interface no README.
